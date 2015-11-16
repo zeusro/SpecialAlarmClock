@@ -1,18 +1,19 @@
 package zeusro.specialalarmclock.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.Toast;
 
 import java.lang.reflect.Field;
 
-import zeusro.specialalarmclock.R;
+import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
 
-public class HomeActivity extends AppCompatActivity implements android.view.View.OnClickListener {
-
-
+/**
+ * Created by Z on 2015/11/16.
+ */
+public class BaseActivity extends AppCompatActivity implements android.view.View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,21 +21,14 @@ public class HomeActivity extends AppCompatActivity implements android.view.View
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
             Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-            if (menuKeyField != null) {
+            if(menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);
             }
         } catch (Exception ex) {
             // Ignore
         }
-
-        setContentView(R.layout.activity_home);
-        Toast toast = Toast.makeText(this, R.string.Thank, Toast.LENGTH_SHORT);
-        //显示toast信息
-        toast.show();
-
     }
-
 
     /**
      * Called when a view has been clicked.
@@ -46,5 +40,8 @@ public class HomeActivity extends AppCompatActivity implements android.view.View
 
     }
 
-
+    protected void callMathAlarmScheduleService() {
+        Intent mathAlarmServiceIntent = new Intent(this, AlarmServiceBroadcastReciever.class);
+        sendBroadcast(mathAlarmServiceIntent, null);
+    }
 }

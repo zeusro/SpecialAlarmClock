@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.AlarmActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -26,6 +26,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".receiver.AlarmAlertBroadcastReciever"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
+        <receiver
+            android:name=".receiver.AlarmServiceBroadcastReciever"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
+
+        <service
+            android:name=".service.AlarmService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
+        <activity android:name=".activity.AlarmAlertActivity" >
+        </activity>
+        <activity android:name=".activity.AlarmPreferencesActivity" >
+        </activity>
+
+        <receiver
+            android:name=".receiver.PhoneStateChangedBroadcastReciever"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>
