@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">SpecialAlarmClock</string>
     <string name="Thank">感谢您使用本APP</string>
+    <string name="Introduction">自制闹钟APP，拥有一个勤奋模式，用于早起。另外，它还能够记录每天起床的时间</string>
+    <string name="_0">0</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="decimal_button_text">,</string>
+    <string name="clear_button_text">Clear</string>
+    <string name="minus_button_text">-</string>
 </resources>

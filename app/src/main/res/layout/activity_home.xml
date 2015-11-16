@@ -25,7 +25,7 @@
             android:layout_marginLeft="38dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="10dp"
-            android:text="自制闹钟APP，拥有一个勤奋模式，用于早起。另外，它还能够记录每天起床的时间"
+            android:text="@string/Introduction"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
 
         <ListView
