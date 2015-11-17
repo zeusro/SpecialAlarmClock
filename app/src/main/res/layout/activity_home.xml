@@ -25,18 +25,20 @@
             android:layout_marginLeft="38dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="10dp"
-            android:text="@string/Introduction"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/Introduction"/>
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
             android:layout_above="@+id/bottom_menu"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="65dp"
-            android:longClickable="true"/>
+            android:longClickable="false"
+            android:headerDividersEnabled="false"
+            android:id="@+id/listView"
+            android:textFilterEnabled="false"/>
     </LinearLayout>
 
     <RelativeLayout

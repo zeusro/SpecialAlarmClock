@@ -3,9 +3,6 @@ package zeusro.specialalarmclock.activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,10 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -30,23 +25,21 @@ import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmPreferenceListAdapter;
+
 public class AlarmPreferencesActivity extends BaseActivity {
 
-    ImageButton deleteButton;
-    TextView okButton;
-    TextView cancelButton;
     private Alarm alarm;
     private MediaPlayer mediaPlayer;
-
     private ListAdapter listAdapter;
     private ListView listView;
+    private CountDownTimer alarmToneTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // requestWindowFeature(Window.FEATURE_NO_TITLE);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
         setContentView(R.layout.preferences);
 
         Bundle bundle = getIntent().getExtras();
@@ -58,15 +51,16 @@ public class AlarmPreferencesActivity extends BaseActivity {
         if (bundle != null && bundle.containsKey("adapter")) {
             setListAdapter((AlarmPreferenceListAdapter) bundle.getSerializable("adapter"));
         } else {
-            setListAdapter(new AlarmPreferenceListAdapter(this, getMathAlarm()));
+            setListAdapter(new AlarmPreferenceListAdapter(this, alarm));
         }
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-                final AlarmPreferenceListAdapter alarmPreferenceListAdapter = (AlarmPreferenceListAdapter) getListAdapter();
+                final AlarmPreferenceListAdapter alarmPreferenceListAdapter = (AlarmPreferenceListAdapter) listAdapter;
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
+
 
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -76,9 +70,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         boolean checked = !checkedTextView.isChecked();
                         ((CheckedTextView) v).setChecked(checked);
                         switch (alarmPreference.getKey()) {
-                            case ALARM_ACTIVE:
-                                alarm.setAlarmActive(checked);
-                                break;
                             case ALARM_VIBRATE:
                                 alarm.setVibrate(checked);
                                 if (checked) {
@@ -89,13 +80,12 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         alarmPreference.setValue(checked);
                         break;
+                    case INTEGER:
+                        break;
                     case STRING:
-
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-
                         alert.setTitle(alarmPreference.getTitle());
                         // alert.setMessage(message);
-
                         // Set an EditText view to get user input
                         final EditText input = new EditText(AlarmPreferencesActivity.this);
 
@@ -111,7 +101,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                     alarm.setAlarmName(alarmPreference.getValue().toString());
                                 }
 
-                                alarmPreferenceListAdapter.setMathAlarm(getMathAlarm());
+                                alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
                         });
@@ -119,15 +109,13 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         break;
                     case LIST:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-
                         alert.setTitle(alarmPreference.getTitle());
                         // alert.setMessage(message);
-
                         CharSequence[] items = new CharSequence[alarmPreference.getOptions().length];
                         for (int i = 0; i < items.length; i++)
                             items[i] = alarmPreference.getOptions()[i];
 
-                        alert.setItems(items, new OnClickListener() {
+                        alert.setItems(items, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -190,29 +178,24 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                     default:
                                         break;
                                 }
-                                alarmPreferenceListAdapter.setMathAlarm(getMathAlarm());
+                                alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
 
                         });
-
                         alert.show();
                         break;
-                    case MULTIPLE_LIST:
+                    case  MULTIPLE_ImageButton:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-
                         alert.setTitle(alarmPreference.getTitle());
-                        // alert.setMessage(message);
-
                         CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
                         for (int i = 0; i < multiListItems.length; i++)
                             multiListItems[i] = alarmPreference.getOptions()[i];
-
                         boolean[] checkedItems = new boolean[multiListItems.length];
-                        for (int day : getMathAlarm().getDays()) {
+                        for (int day = 0; day <  alarm.getDays().length; day++) {
                             checkedItems[day] = true;
                         }
-                        alert.setMultiChoiceItems(multiListItems, checkedItems, new OnMultiChoiceClickListener() {
+                        alert.setMultiChoiceItems(multiListItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
 
                             @Override
                             public void onClick(final DialogInterface dialog, int which, boolean isChecked) {
@@ -235,19 +218,21 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
                             }
                         });
-                        alert.setOnCancelListener(new OnCancelListener() {
+                        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                alarmPreferenceListAdapter.setMathAlarm(getMathAlarm());
+                                alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
 
                             }
                         });
                         alert.show();
                         break;
+                    case MULTIPLE_LIST:
+
+                        break;
                     case TIME:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(AlarmPreferencesActivity.this, new TimePickerDialog.OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                                 Calendar newAlarmTime = Calendar.getInstance();
@@ -255,7 +240,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                 newAlarmTime.set(Calendar.MINUTE, minutes);
                                 newAlarmTime.set(Calendar.SECOND, 0);
                                 alarm.setAlarmTime(newAlarmTime);
-                                alarmPreferenceListAdapter.setMathAlarm(getMathAlarm());
+                                alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
                         }, alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY), alarm.getAlarmTime().get(Calendar.MINUTE), true);
@@ -270,14 +255,13 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
 
 
-
-    private CountDownTimer alarmToneTimer;
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("alarm", getMathAlarm());
-        outState.putSerializable("adapter", (AlarmPreferenceListAdapter) getListAdapter());
-    };
+        outState.putSerializable("alarm", alarm);
+        outState.putSerializable("adapter", (AlarmPreferenceListAdapter) listAdapter);
+    }
+
+    ;
 
     @Override
     protected void onPause() {
@@ -290,22 +274,14 @@ public class AlarmPreferencesActivity extends BaseActivity {
         // setListAdapter(null);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
-    public Alarm getMathAlarm() {
-        return alarm;
-    }
+
 
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
     }
 
-    public ListAdapter getListAdapter() {
-        return listAdapter;
-    }
+
 
     public void setListAdapter(ListAdapter listAdapter) {
         this.listAdapter = listAdapter;
@@ -319,9 +295,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
         return listView;
     }
 
-    public void setListView(ListView listView) {
-        this.listView = listView;
-    }
+
 
     @Override
     public void onClick(View v) {

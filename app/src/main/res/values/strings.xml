@@ -15,4 +15,6 @@
     <string name="decimal_button_text">,</string>
     <string name="clear_button_text">Clear</string>
     <string name="minus_button_text">-</string>
+    <string name="NoClockAlert">你现在没有闹钟哦,添加一个吧</string>
+    <string name="AlarmStatus">状态</string>
 </resources>

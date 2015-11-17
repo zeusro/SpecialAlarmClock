@@ -30,20 +30,12 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     private Alarm alarm;
     private List<AlarmPreference> preferences = new ArrayList<AlarmPreference>();
     private final String[] repeatDays = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    private final String[] alarmDifficulties = {"Easy", "Medium", "Hard"};
-
     private String[] alarmTones;
     private String[] alarmTonePaths;
 
     public AlarmPreferenceListAdapter(Context context, Alarm alarm) {
         setContext(context);
 
-
-//		(new Runnable(){
-//
-//			@Override
-//			public void run() {
-        Log.d("AlarmPreferenceListAdapter", "Loading Ringtones...");
         Log.d("AlarmPreferenceListAdapter", "Loading Ringtones...");
 
         RingtoneManager ringtoneMgr = new RingtoneManager(getContext());
@@ -53,7 +45,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         Cursor alarmsCursor = ringtoneMgr.getCursor();
 
         alarmTones = new String[alarmsCursor.getCount() + 1];
-        alarmTones[0] = "Silent";
+        alarmTones[0] = "静默模式";
         alarmTonePaths = new String[alarmsCursor.getCount() + 1];
         alarmTonePaths[0] = "";
 
@@ -65,11 +57,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         }
         Log.d("AlarmPreferenceListAdapter", "Finished Loading " + alarmTones.length + " Ringtones.");
         alarmsCursor.close();
-//
-//			}
-//
-//		}).run();
-//
+
         setMathAlarm(alarm);
     }
 
@@ -162,23 +150,22 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
         preferences.clear();
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_ACTIVE, "Active", null, null, alarm.getAlarmActive(), AlarmPreference.Type.BOOLEAN));
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_NAME, "Label", alarm.getAlarmName(), null, alarm.getAlarmName(), AlarmPreference.Type.STRING));
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TIME, "Set time", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), AlarmPreference.Type.TIME));
-        // FIXME: 2015/11/16
-//        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_REPEAT, "Repeat",alarm.getRepeatDaysString(), repeatDays, alarm.getDays(),Type.MULTIPLE_LIST));
-//        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_DIFFICULTY,"Difficulty", alarm.getDifficulty().toString(), alarmDifficulties, alarm.getDifficulty(), Type.LIST));
+//        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_ACTIVE, context.getString(R.string.AlarmStatus), null, null, alarm.getAlarmActive(), AlarmPreference.Type.BOOLEAN));
+        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), AlarmPreference.Type.STRING));
+        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TIME, "时间", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), AlarmPreference.Type.TIME));
+        //TODO: 弄6个image button出来
+        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_REPEAT, "重复","重复", repeatDays, alarm.getDays(), AlarmPreference.Type.MULTIPLE_ImageButton));
 
         Uri alarmToneUri = Uri.parse(alarm.getAlarmTonePath());
         Ringtone alarmTone = RingtoneManager.getRingtone(getContext(), alarmToneUri);
 
         if (alarmTone instanceof Ringtone && !alarm.getAlarmTonePath().equalsIgnoreCase("")) {
-            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "Ringtone", alarmTone.getTitle(getContext()), alarmTones, alarm.getAlarmTonePath(), AlarmPreference.Type.LIST));
+            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "铃声", alarmTone.getTitle(getContext()), alarmTones, alarm.getAlarmTonePath(), AlarmPreference.Type.LIST));
         } else {
-            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "Ringtone", getAlarmTones()[0], alarmTones, null, AlarmPreference.Type.LIST));
+            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "铃声", getAlarmTones()[0], alarmTones, null, AlarmPreference.Type.LIST));
         }
 
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_VIBRATE, "Vibrate", null, null, alarm.getVibrate(), AlarmPreference.Type.BOOLEAN));
+        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_VIBRATE, "振动", null, null, alarm.getVibrate(), AlarmPreference.Type.BOOLEAN));
     }
 
 
@@ -194,9 +181,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         return repeatDays;
     }
 
-    public String[] getAlarmDifficulties() {
-        return alarmDifficulties;
-    }
+
 
     public String[] getAlarmTones() {
         return alarmTones;

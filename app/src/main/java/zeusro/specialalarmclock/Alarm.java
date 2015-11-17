@@ -22,7 +22,7 @@ public class Alarm implements Serializable {
     private int[] days = {Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};
     private String alarmTonePath = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
     private Boolean vibrate = true;
-    private String alarmName = "Alarm Clock";
+    private String alarmName = "极简闹钟";
 
     public Alarm() {
 
@@ -35,7 +35,7 @@ public class Alarm implements Serializable {
     public void addDay(int day) {
         boolean contains = false;
         int[] temp = getDays();
-        for (int d :temp)
+        for (int d : temp)
             if (d == day)
                 contains = true;
         if (!contains) {
@@ -51,16 +51,21 @@ public class Alarm implements Serializable {
     public void removeDay(int day) {
         boolean contains = false;
         int[] temp = getDays();
-        for (int d : temp)
-            if (d == day)
+        int[] result = new int[temp.length];
+        int xiabiao = temp.length;
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i] == day) {
                 contains = true;
-        if(contains) {
-            int[] result = new int[temp.length - 1];
-            // FIXME: 2015/11/16 bug
-            for (int i = 0; i < temp.length; i++) {
-                if (temp[i] != day) {
-                    result[i] = temp[i];
-                }
+                result = new int[temp.length - 1];
+                xiabiao = i;
+            }
+        }
+        if (contains) {
+            for (int i = 0; i < xiabiao; i++) {
+                result[i] = temp[i];
+            }
+            for (int i = xiabiao + 1; i < temp.length; i++) {
+                result[i - 1] = temp[i];
             }
             setDays(result);
         }
@@ -131,6 +136,8 @@ public class Alarm implements Serializable {
         newAlarmTime.set(Calendar.SECOND, 0);
         setAlarmTime(newAlarmTime);
     }
+
+
 
     /**
      * @return the repeatDays

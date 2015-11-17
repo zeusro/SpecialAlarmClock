@@ -2,12 +2,14 @@ package zeusro.specialalarmclock.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
+import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
 
 /**
@@ -17,6 +19,9 @@ public class BaseActivity extends AppCompatActivity implements android.view.View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(R.layout.middle_title_actionbar);
 
         try {
             ViewConfiguration config = ViewConfiguration.get(this);

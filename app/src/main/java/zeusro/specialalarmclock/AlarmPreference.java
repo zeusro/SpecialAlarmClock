@@ -21,7 +21,8 @@ public class AlarmPreference {
         STRING,
         LIST,
         MULTIPLE_LIST,
-        TIME
+        TIME,
+        MULTIPLE_ImageButton,
     }
 
     private Key key;
