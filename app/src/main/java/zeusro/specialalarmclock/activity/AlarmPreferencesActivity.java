@@ -196,6 +196,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         for (int day = 0; day <  alarm.getDays().length; day++) {
                             checkedItems[day] = true;
                         }
+
                         alert.setMultiChoiceItems(multiListItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
 
                             @Override
@@ -224,13 +225,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
                             public void onCancel(DialogInterface dialog) {
                                 alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
-
                             }
                         });
                         alert.show();
-                        break;
-                    case MULTIPLE_LIST:
-
                         break;
                     case TIME:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(AlarmPreferencesActivity.this, new TimePickerDialog.OnTimeSetListener() {
