@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
+import zeusro.specialalarmclock.Key;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmPreferenceListAdapter;
 
@@ -97,7 +98,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
                                 alarmPreference.setValue(input.getText().toString());
 
-                                if (alarmPreference.getKey() == AlarmPreference.Key.ALARM_NAME) {
+                                if (alarmPreference.getKey() == Key.ALARM_NAME) {
                                     alarm.setAlarmName(alarmPreference.getValue().toString());
                                 }
 

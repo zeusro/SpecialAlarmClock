@@ -19,6 +19,8 @@ import java.util.List;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
+import zeusro.specialalarmclock.Key;
+import zeusro.specialalarmclock.Type;
 
 /**
  * Created by Z on 2015/11/16.
@@ -150,22 +152,22 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
         preferences.clear();
-//        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_ACTIVE, context.getString(R.string.AlarmStatus), null, null, alarm.getAlarmActive(), AlarmPreference.Type.BOOLEAN));
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), AlarmPreference.Type.STRING));
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TIME, "时间", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), AlarmPreference.Type.TIME));
+//        preferences.add(new AlarmPreference(Key.ALARM_ACTIVE, context.getString(R.string.AlarmStatus), null, null, alarm.getAlarmActive(), Type.BOOLEAN));
+        preferences.add(new AlarmPreference(Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), Type.STRING));
+        preferences.add(new AlarmPreference(Key.ALARM_TIME, "时间", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), Type.TIME));
         //TODO: 弄6个image button出来
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_REPEAT, "重复","重复", repeatDays, alarm.getDays(), AlarmPreference.Type.MULTIPLE_ImageButton));
+        preferences.add(new AlarmPreference(Key.ALARM_REPEAT, "重复","重复", repeatDays, alarm.getDays(), Type.MULTIPLE_ImageButton));
 
         Uri alarmToneUri = Uri.parse(alarm.getAlarmTonePath());
         Ringtone alarmTone = RingtoneManager.getRingtone(getContext(), alarmToneUri);
 
         if (alarmTone instanceof Ringtone && !alarm.getAlarmTonePath().equalsIgnoreCase("")) {
-            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "铃声", alarmTone.getTitle(getContext()), alarmTones, alarm.getAlarmTonePath(), AlarmPreference.Type.LIST));
+            preferences.add(new AlarmPreference(Key.ALARM_TONE, "铃声", alarmTone.getTitle(getContext()), alarmTones, alarm.getAlarmTonePath(), Type.LIST));
         } else {
-            preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_TONE, "铃声", getAlarmTones()[0], alarmTones, null, AlarmPreference.Type.LIST));
+            preferences.add(new AlarmPreference(Key.ALARM_TONE, "铃声", getAlarmTones()[0], alarmTones, null, Type.LIST));
         }
 
-        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_VIBRATE, "振动", null, null, alarm.getVibrate(), AlarmPreference.Type.BOOLEAN));
+        preferences.add(new AlarmPreference(Key.ALARM_VIBRATE, "振动", null, null, alarm.getVibrate(), Type.BOOLEAN));
     }
 
 

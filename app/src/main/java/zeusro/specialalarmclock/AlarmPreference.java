@@ -5,26 +5,6 @@ package zeusro.specialalarmclock;
  */
 public class AlarmPreference {
 
-    public enum Key{
-        ALARM_NAME,
-        ALARM_ACTIVE,
-        ALARM_TIME,
-        ALARM_REPEAT,
-        ALARM_TONE,
-        ALARM_VIBRATE,
-        ALARM_DIFFICULTY
-    }
-
-    public enum Type{
-        BOOLEAN,
-        INTEGER,
-        STRING,
-        LIST,
-        MULTIPLE_LIST,
-        TIME,
-        MULTIPLE_ImageButton,
-    }
-
     private Key key;
     private String title;
     private String summary;
