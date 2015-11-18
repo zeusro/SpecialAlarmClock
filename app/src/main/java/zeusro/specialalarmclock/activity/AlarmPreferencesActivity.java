@@ -2,19 +2,23 @@ package zeusro.specialalarmclock.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -47,18 +51,33 @@ public class AlarmPreferencesActivity extends BaseActivity {
             setListAdapter(new AlarmPreferenceListAdapter(this, alarm));
         }
 
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//        EditText tagText= (EditText) findViewById(R.id.tagText);
+//        if(tagText!=null){
+//            tagText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+//        }
 
+
+        getListView().setItemsCanFocus(true);
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 final AlarmPreferenceListAdapter alarmPreferenceListAdapter = (AlarmPreferenceListAdapter) listAdapter;
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                Log.d("alarmPreference.getType()",String.valueOf(alarmPreference.getType()));
                 switch (alarmPreference.getType()) {
                     case TIME:
-                        TimePicker timePicker1 = (TimePicker) findViewById(R.id.timePicker);
-                        if (timePicker1!=null){
+                        TimePicker timePicker1 = (TimePicker) v.findViewById(R.id.timePicker);
+                        Toast toast = Toast.makeText(getBaseContext(),String.valueOf(timePicker1!=null) , Toast.LENGTH_SHORT);
+                        //显示toast信息
+                        toast.show();
+                        if (timePicker1 != null) {
                             timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                                 @Override
                                 public void onTimeChanged(TimePicker view, int hours, int minute) {
@@ -69,11 +88,55 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                     alarm.setAlarmTime(newAlarmTime);
                                     alarmPreferenceListAdapter.setMathAlarm(alarm);
                                     alarmPreferenceListAdapter.notifyDataSetChanged();
-
                                 }
                             });
                         }
                         break;
+                    case MULTIPLE_ImageButton:
+                        SetDayRepeat(v);
+                        break;
+//                    case MULTIPLE_ImageButton:
+//                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
+//                        alert.setTitle(alarmPreference.getTitle());
+//                        CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
+//                        for (int i = 0; i < multiListItems.length; i++)
+//                            multiListItems[i] = alarmPreference.getOptions()[i];
+//                        boolean[] checkedItems = new boolean[multiListItems.length];
+//                        for (int day = 0; day < alarm.getDays().length; day++) {
+//                            checkedItems[day] = true;
+//                        }
+//                        alert.setMultiChoiceItems(multiListItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+//
+//                            @Override
+//                            public void onClick(final DialogInterface dialog, int which, boolean isChecked) {
+//
+//                                int thisDay = Alarm.Values()[which];
+//
+//                                if (isChecked) {
+//                                    alarm.addDay(thisDay);
+//                                } else {
+//                                    // Only remove the day if there are more than 1
+//                                    // selected
+//                                    if (alarm.getDays().length > 1) {
+//                                        alarm.removeDay(thisDay);
+//                                    } else {
+//                                        // If the last day was unchecked, re-check
+//                                        // it
+//                                        ((AlertDialog) dialog).getListView().setItemChecked(which, true);
+//                                    }
+//                                }
+//
+//                            }
+//                        });
+//                        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                            @Override
+//                            public void onCancel(DialogInterface dialog) {
+//                                alarmPreferenceListAdapter.setMathAlarm(alarm);
+//                                alarmPreferenceListAdapter.notifyDataSetChanged();
+//                            }
+//                        });
+//                        alert.show();
+//                        break;
                     case BOOLEAN:
                         CheckedTextView checkedTextView = (CheckedTextView) v;
                         boolean checked = !checkedTextView.isChecked();
@@ -89,7 +152,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         alarmPreference.setValue(checked);
                         break;
-
                     case LIST:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());
@@ -168,49 +230,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         });
                         alert.show();
                         break;
-                    case MULTIPLE_ImageButton:
-                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-                        alert.setTitle(alarmPreference.getTitle());
-                        CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
-                        for (int i = 0; i < multiListItems.length; i++)
-                            multiListItems[i] = alarmPreference.getOptions()[i];
-                        boolean[] checkedItems = new boolean[multiListItems.length];
-                        for (int day = 0; day < alarm.getDays().length; day++) {
-                            checkedItems[day] = true;
-                        }
 
-                        alert.setMultiChoiceItems(multiListItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-
-                            @Override
-                            public void onClick(final DialogInterface dialog, int which, boolean isChecked) {
-
-                                int thisDay = Alarm.Values()[which];
-
-                                if (isChecked) {
-                                    alarm.addDay(thisDay);
-                                } else {
-                                    // Only remove the day if there are more than 1
-                                    // selected
-                                    if (alarm.getDays().length > 1) {
-                                        alarm.removeDay(thisDay);
-                                    } else {
-                                        // If the last day was unchecked, re-check
-                                        // it
-                                        ((AlertDialog) dialog).getListView().setItemChecked(which, true);
-                                    }
-                                }
-
-                            }
-                        });
-                        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                alarmPreferenceListAdapter.setMathAlarm(alarm);
-                                alarmPreferenceListAdapter.notifyDataSetChanged();
-                            }
-                        });
-                        alert.show();
-                        break;
                     default:
                         break;
                 }
@@ -238,6 +258,35 @@ public class AlarmPreferencesActivity extends BaseActivity {
         // setListAdapter(null);
     }
 
+    private final void SetDayRepeat(View pannel) {
+        Toast toast = Toast.makeText(getBaseContext(),String.valueOf(pannel!=null) , Toast.LENGTH_SHORT);
+        //显示toast信息
+        toast.show();
+        SetWeekButton(R.id.btn_Monday,1);
+        SetWeekButton(R.id.btn_Tuesday,2);
+        SetWeekButton(R.id.btn_Webnesday,3);
+        SetWeekButton(R.id.btn_Thursday,4);
+        SetWeekButton(R.id.btn_Saturday,6);
+        SetWeekButton(R.id.btn_Sunday,7);
+    }
+
+    final  void SetWeekButton(int id, int dayOfWeek) {
+        final Button week = (Button) findViewById(id);
+        final int shit=dayOfWeek;
+        if (week != null) {
+            week.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    week.setTextColor(Color.WHITE);
+                    week.setBackgroundColor(Color.BLUE);
+                    Toast toast = Toast.makeText(getBaseContext(),String.valueOf(shit) , Toast.LENGTH_SHORT);
+                    //显示toast信息
+                    toast.show();
+                }
+            });
+        }
+        Log.d("button",String.valueOf(week != null));
+    }
 
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
@@ -263,3 +312,5 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     }
 }
+
+
