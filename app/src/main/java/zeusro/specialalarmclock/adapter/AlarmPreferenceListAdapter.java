@@ -2,6 +2,7 @@ package zeusro.specialalarmclock.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -10,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,6 +99,26 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
             case MULTIPLE_ImageButton:
                 if (null == convertView)
                     convertView = layoutInflater.inflate(R.layout.week_button, null);
+                // http://blog.csdn.net/yangzl2008/article/details/7863938
+                // http://blog.csdn.net/gyflyx/article/details/6567701
+                // http://stackoverflow.com/questions/12596199/android-how-to-set-onclick-event-for-button-in-list-item-of-listview
+                ((Button) convertView.findViewById(R.id.btn_Monday)).setTextColor(Color.WHITE);
+                ((Button) convertView.findViewById(R.id.btn_Monday)).setBackgroundColor(Color.BLUE);
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast toast = Toast.makeText(getContext(), "fuck", Toast.LENGTH_SHORT);
+                        //显示toast信息
+                        toast.show();
+
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Monday), 1);
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Tuesday), 2);
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Webnesday), 3);
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Thursday), 4);
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Saturday), 6);
+                        SetWeekButton((Button) v.findViewById(R.id.btn_Sunday), 7);
+                    }
+                });
                 break;
             case BOOLEAN:
                 if (null == convertView)
@@ -153,6 +176,25 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
 
         return alarm;
     }
+
+    final void SetWeekButton(Button button, int dayOfWeek) {
+        final Button week = button;
+        final int shit = dayOfWeek;
+        if (week != null) {
+            week.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    week.setTextColor(Color.WHITE);
+                    week.setBackgroundColor(Color.BLUE);
+                    Toast toast = Toast.makeText(getContext(), String.valueOf(shit), Toast.LENGTH_SHORT);
+                    //显示toast信息
+                    toast.show();
+                }
+            });
+        }
+        Log.d("button", String.valueOf(week != null));
+    }
+
 
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;

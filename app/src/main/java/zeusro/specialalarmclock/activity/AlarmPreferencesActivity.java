@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
@@ -50,7 +51,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
         } else {
             setListAdapter(new AlarmPreferenceListAdapter(this, alarm));
         }
-
 //        EditText tagText= (EditText) findViewById(R.id.tagText);
 //        if(tagText!=null){
 //            tagText.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         break;
                     case MULTIPLE_ImageButton:
-                        SetDayRepeat(v);
+
                         break;
 //                    case MULTIPLE_ImageButton:
 //                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
@@ -258,35 +258,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
         // setListAdapter(null);
     }
 
-    private final void SetDayRepeat(View pannel) {
-        Toast toast = Toast.makeText(getBaseContext(),String.valueOf(pannel!=null) , Toast.LENGTH_SHORT);
-        //显示toast信息
-        toast.show();
-        SetWeekButton(R.id.btn_Monday,1);
-        SetWeekButton(R.id.btn_Tuesday,2);
-        SetWeekButton(R.id.btn_Webnesday,3);
-        SetWeekButton(R.id.btn_Thursday,4);
-        SetWeekButton(R.id.btn_Saturday,6);
-        SetWeekButton(R.id.btn_Sunday,7);
-    }
 
-    final  void SetWeekButton(int id, int dayOfWeek) {
-        final Button week = (Button) findViewById(id);
-        final int shit=dayOfWeek;
-        if (week != null) {
-            week.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    week.setTextColor(Color.WHITE);
-                    week.setBackgroundColor(Color.BLUE);
-                    Toast toast = Toast.makeText(getBaseContext(),String.valueOf(shit) , Toast.LENGTH_SHORT);
-                    //显示toast信息
-                    toast.show();
-                }
-            });
-        }
-        Log.d("button",String.valueOf(week != null));
-    }
+
+
 
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
