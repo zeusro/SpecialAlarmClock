@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBar;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,11 +37,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.preferences);
-
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("alarm")) {
             setMathAlarm((Alarm) bundle.getSerializable("alarm"));
@@ -81,9 +76,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         alarmPreference.setValue(checked);
                         break;
-                    case INTEGER:
-                        break;
-                    case STRING:
+                    case EditText:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());
                         // alert.setMessage(message);

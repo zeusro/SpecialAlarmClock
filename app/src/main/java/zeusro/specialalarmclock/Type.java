@@ -5,10 +5,8 @@ package zeusro.specialalarmclock;
  */
 public enum Type{
     BOOLEAN,
-    INTEGER,
-    STRING,
+    EditText,
     LIST,
-    MULTIPLE_LIST,
     TIME,
     MULTIPLE_ImageButton,
 }

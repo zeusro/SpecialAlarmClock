@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import java.util.List;
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
 import zeusro.specialalarmclock.Key;
+import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.Type;
 
 /**
@@ -36,30 +38,27 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     private String[] alarmTonePaths;
 
     public AlarmPreferenceListAdapter(Context context, Alarm alarm) {
-        setContext(context);
+        this.context = (context);
 
         Log.d("AlarmPreferenceListAdapter", "Loading Ringtones...");
 
         RingtoneManager ringtoneMgr = new RingtoneManager(getContext());
-
         ringtoneMgr.setType(RingtoneManager.TYPE_ALARM);
-
         Cursor alarmsCursor = ringtoneMgr.getCursor();
-
         alarmTones = new String[alarmsCursor.getCount() + 1];
         alarmTones[0] = "静默模式";
         alarmTonePaths = new String[alarmsCursor.getCount() + 1];
         alarmTonePaths[0] = "";
-
         if (alarmsCursor.moveToFirst()) {
             do {
+                Log.d("ITEM", ringtoneMgr.getRingtone(alarmsCursor.getPosition()).getTitle(getContext()));
+                Log.d("ITEM", ringtoneMgr.getRingtoneUri(alarmsCursor.getPosition()).toString());
                 alarmTones[alarmsCursor.getPosition() + 1] = ringtoneMgr.getRingtone(alarmsCursor.getPosition()).getTitle(getContext());
                 alarmTonePaths[alarmsCursor.getPosition() + 1] = ringtoneMgr.getRingtoneUri(alarmsCursor.getPosition()).toString();
             } while (alarmsCursor.moveToNext());
         }
         Log.d("AlarmPreferenceListAdapter", "Finished Loading " + alarmTones.length + " Ringtones.");
         alarmsCursor.close();
-
         setMathAlarm(alarm);
     }
 
@@ -83,27 +82,33 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         AlarmPreference alarmPreference = (AlarmPreference) getItem(position);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         switch (alarmPreference.getType()) {
+            case EditText:
+                //标签
+                if (null == convertView)
+                    convertView = layoutInflater.inflate(R.layout.simple_edit_text, null);
+                EditText editText = (EditText) convertView.findViewById(R.id.tagText);
+                editText.setText("");
+                break;
+            case TIME:
+                if (null == convertView)
+                    convertView = layoutInflater.inflate(R.layout.time_picker, null);
+                break;
+            case MULTIPLE_ImageButton:
+                if (null == convertView)
+                    convertView = layoutInflater.inflate(R.layout.week_button, null);
+                break;
             case BOOLEAN:
-                // FIXME: 2015/11/16
-                //|| convertView.getId() != (int) android.R.layout.simple_list_item_checked
-                if (null == convertView )
+                if (null == convertView)
                     convertView = layoutInflater.inflate(android.R.layout.simple_list_item_checked, null);
-
                 CheckedTextView checkedTextView = (CheckedTextView) convertView.findViewById(android.R.id.text1);
                 checkedTextView.setText(alarmPreference.getTitle());
                 checkedTextView.setChecked((Boolean) alarmPreference.getValue());
                 break;
-            case INTEGER:
-            case STRING:
-            case LIST:
-            case MULTIPLE_LIST:
-            case TIME:
             default:
 
                 //// FIXME: 2015/11/16
 //|| convertView.getId() !=  android.R.layout.simple_list_item_2
-                int ddd=17367045;
-                if (null == convertView )
+                if (null == convertView)
                     convertView = layoutInflater.inflate(android.R.layout.simple_list_item_2, null);
 
                 TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
@@ -153,10 +158,10 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         this.alarm = alarm;
         preferences.clear();
 //        preferences.add(new AlarmPreference(Key.ALARM_ACTIVE, context.getString(R.string.AlarmStatus), null, null, alarm.getAlarmActive(), Type.BOOLEAN));
-        preferences.add(new AlarmPreference(Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), Type.STRING));
+        preferences.add(new AlarmPreference(Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), Type.EditText));
         preferences.add(new AlarmPreference(Key.ALARM_TIME, "时间", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), Type.TIME));
         //TODO: 弄6个image button出来
-        preferences.add(new AlarmPreference(Key.ALARM_REPEAT, "重复","重复", repeatDays, alarm.getDays(), Type.MULTIPLE_ImageButton));
+        preferences.add(new AlarmPreference(Key.ALARM_REPEAT, "重复", "重复", repeatDays, alarm.getDays(), Type.MULTIPLE_ImageButton));
 
         Uri alarmToneUri = Uri.parse(alarm.getAlarmTonePath());
         Ringtone alarmTone = RingtoneManager.getRingtone(getContext(), alarmToneUri);
@@ -175,14 +180,10 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         return context;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
 
     public String[] getRepeatDays() {
         return repeatDays;
     }
-
 
 
     public String[] getAlarmTones() {

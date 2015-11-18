@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              style="com.android.internal.R.styleable.TwoLineListItem">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:linksClickable="false"
+        android:phoneNumber="false"
+        android:text="标签"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"/>
+    <EditText
+        android:id="@+id/tagText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="ddd"/>
+
+</LinearLayout>
