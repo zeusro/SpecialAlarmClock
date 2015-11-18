@@ -1,7 +1,6 @@
 package zeusro.specialalarmclock.activity;
 
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -13,7 +12,6 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TimePicker;
@@ -22,7 +20,6 @@ import java.util.Calendar;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
-import zeusro.specialalarmclock.Key;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmPreferenceListAdapter;
 
@@ -56,11 +53,27 @@ public class AlarmPreferencesActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
                 final AlarmPreferenceListAdapter alarmPreferenceListAdapter = (AlarmPreferenceListAdapter) listAdapter;
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
-
-
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 switch (alarmPreference.getType()) {
+                    case TIME:
+                        TimePicker timePicker1 = (TimePicker) findViewById(R.id.timePicker);
+                        if (timePicker1!=null){
+                            timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                                @Override
+                                public void onTimeChanged(TimePicker view, int hours, int minute) {
+                                    Calendar newAlarmTime = Calendar.getInstance();
+                                    newAlarmTime.set(Calendar.HOUR_OF_DAY, hours);
+                                    newAlarmTime.set(Calendar.MINUTE, minute);
+                                    newAlarmTime.set(Calendar.SECOND, 0);
+                                    alarm.setAlarmTime(newAlarmTime);
+                                    alarmPreferenceListAdapter.setMathAlarm(alarm);
+                                    alarmPreferenceListAdapter.notifyDataSetChanged();
+
+                                }
+                            });
+                        }
+                        break;
                     case BOOLEAN:
                         CheckedTextView checkedTextView = (CheckedTextView) v;
                         boolean checked = !checkedTextView.isChecked();
@@ -76,31 +89,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         alarmPreference.setValue(checked);
                         break;
-                    case EditText:
-                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-                        alert.setTitle(alarmPreference.getTitle());
-                        // alert.setMessage(message);
-                        // Set an EditText view to get user input
-                        final EditText input = new EditText(AlarmPreferencesActivity.this);
 
-                        input.setText(alarmPreference.getValue().toString());
-
-                        alert.setView(input);
-                        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                alarmPreference.setValue(input.getText().toString());
-
-                                if (alarmPreference.getKey() == Key.ALARM_NAME) {
-                                    alarm.setAlarmName(alarmPreference.getValue().toString());
-                                }
-
-                                alarmPreferenceListAdapter.setMathAlarm(alarm);
-                                alarmPreferenceListAdapter.notifyDataSetChanged();
-                            }
-                        });
-                        alert.show();
-                        break;
                     case LIST:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());
@@ -179,14 +168,14 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         });
                         alert.show();
                         break;
-                    case  MULTIPLE_ImageButton:
+                    case MULTIPLE_ImageButton:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());
                         CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
                         for (int i = 0; i < multiListItems.length; i++)
                             multiListItems[i] = alarmPreference.getOptions()[i];
                         boolean[] checkedItems = new boolean[multiListItems.length];
-                        for (int day = 0; day <  alarm.getDays().length; day++) {
+                        for (int day = 0; day < alarm.getDays().length; day++) {
                             checkedItems[day] = true;
                         }
 
@@ -222,28 +211,12 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         });
                         alert.show();
                         break;
-                    case TIME:
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(AlarmPreferencesActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
-                                Calendar newAlarmTime = Calendar.getInstance();
-                                newAlarmTime.set(Calendar.HOUR_OF_DAY, hours);
-                                newAlarmTime.set(Calendar.MINUTE, minutes);
-                                newAlarmTime.set(Calendar.SECOND, 0);
-                                alarm.setAlarmTime(newAlarmTime);
-                                alarmPreferenceListAdapter.setMathAlarm(alarm);
-                                alarmPreferenceListAdapter.notifyDataSetChanged();
-                            }
-                        }, alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY), alarm.getAlarmTime().get(Calendar.MINUTE), true);
-                        timePickerDialog.setTitle(alarmPreference.getTitle());
-                        timePickerDialog.show();
                     default:
                         break;
                 }
             }
         });
     }
-
 
 
     @Override
@@ -266,12 +239,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
     }
 
 
-
-
     public void setMathAlarm(Alarm alarm) {
         this.alarm = alarm;
     }
-
 
 
     public void setListAdapter(ListAdapter listAdapter) {
@@ -285,7 +255,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
             listView = (ListView) findViewById(android.R.id.list);
         return listView;
     }
-
 
 
     @Override
