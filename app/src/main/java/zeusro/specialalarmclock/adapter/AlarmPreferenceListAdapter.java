@@ -94,6 +94,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 if (null == convertView)
                     convertView = layoutInflater.inflate(R.layout.simple_edit_text, null);
                 final EditText editText = (EditText) convertView.findViewById(R.id.tagText);
+                editText.setText(alarm.getAlarmName());
                 editText.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,18 +113,25 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
             case TIME:
                 if (null == convertView)
                     convertView = layoutInflater.inflate(R.layout.time_picker, null);
-                TimePicker timePicker1 = (TimePicker) convertView.findViewById(R.id.timePicker);
+                final TimePicker timePicker1 = (TimePicker) convertView.findViewById(R.id.timePicker);
+                int oldHour = alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY);
+                int oldMinute =alarm.getAlarmTime().get(Calendar.MINUTE);
+                Log.d("hort", String.valueOf(oldHour));
+                final Calendar newAlarmTime = Calendar.getInstance();
+                timePicker1.setCurrentHour(oldHour);
+                timePicker1.setCurrentMinute(oldMinute);
+                notifyDataSetChanged();
                 if (timePicker1 != null) {
                     timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                         @Override
                         public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                            Calendar newAlarmTime = Calendar.getInstance();
                             newAlarmTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             newAlarmTime.set(Calendar.MINUTE, minute);
-                            newAlarmTime.set(Calendar.SECOND, 0);
                             alarm.setAlarmTime(newAlarmTime);
                             setMathAlarm(alarm);
-                            notifyDataSetChanged();
+                            timePicker1.setCurrentHour(hourOfDay);
+                            timePicker1.setCurrentMinute(minute);
+//
                         }
                     });
                 }
@@ -131,14 +139,13 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
             case MULTIPLE_ImageButton:
                 if (null == convertView)
                     convertView = layoutInflater.inflate(R.layout.week_button, null);
-                alarm.setDays(new int[0]);
                 // http://stackoverflow.com/questions/12596199/android-how-to-set-onclick-event-for-button-in-list-item-of-listview
-                SetWeekButton((Button) convertView.findViewById(R.id.btn_Sunday),Calendar.SUNDAY);
+                SetWeekButton((Button) convertView.findViewById(R.id.btn_Sunday), Calendar.SUNDAY);
                 SetWeekButton((Button) convertView.findViewById(R.id.btn_Monday), Calendar.MONDAY);
                 SetWeekButton((Button) convertView.findViewById(R.id.btn_Tuesday), Calendar.TUESDAY);
                 SetWeekButton((Button) convertView.findViewById(R.id.btn_Webnesday), Calendar.WEDNESDAY);
                 SetWeekButton((Button) convertView.findViewById(R.id.btn_Thursday), Calendar.THURSDAY);
-                SetWeekButton((Button) convertView.findViewById(R.id.btn_Friday),  Calendar.FRIDAY);
+                SetWeekButton((Button) convertView.findViewById(R.id.btn_Friday), Calendar.FRIDAY);
                 SetWeekButton((Button) convertView.findViewById(R.id.btn_Saturday), Calendar.SATURDAY);
 
                 break;
@@ -150,9 +157,6 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 checkedTextView.setChecked((Boolean) alarmPreference.getValue());
                 break;
             default:
-
-                //// FIXME: 2015/11/16
-//|| convertView.getId() !=  android.R.layout.simple_list_item_2
                 if (null == convertView)
                     convertView = layoutInflater.inflate(android.R.layout.simple_list_item_2, null);
 
@@ -168,40 +172,17 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         return convertView;
     }
 
-    public Alarm getMathAlarm() {
-        for (AlarmPreference preference : preferences) {
-            switch (preference.getKey()) {
-                case ALARM_ACTIVE:
-                    alarm.setAlarmActive((Boolean) preference.getValue());
-                    break;
-                case ALARM_NAME:
-                    alarm.setAlarmName((String) preference.getValue());
-                    break;
-                case ALARM_TIME:
-                    alarm.setAlarmTime((String) preference.getValue());
-                    break;
-                case ALARM_DIFFICULTY:
-                    // FIXME: 2015/11/16
-//                    alarm.setDifficulty(Alarm.Difficulty.valueOf((String)preference.getValue()));
-                    break;
-                case ALARM_TONE:
-                    alarm.setAlarmTonePath((String) preference.getValue());
-                    break;
-                case ALARM_VIBRATE:
-                    alarm.setVibrate((Boolean) preference.getValue());
-                    break;
-                case ALARM_REPEAT:
-                    alarm.setDays((int[]) preference.getValue());
-                    break;
-            }
-        }
-
-        return alarm;
-    }
-
     final void SetWeekButton(Button button, final int dayOfWeek) {
         final Button week = button;
         if (week != null) {
+            Boolean isRepeat = alarm.IsRepeat(dayOfWeek);
+            if (isRepeat) {
+                week.setTextColor(Color.WHITE);
+                week.setBackgroundColor(Color.GRAY);
+            } else {
+                week.setTextColor(Color.BLACK);
+                week.setBackgroundColor(Color.WHITE);
+            }
             week.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -214,12 +195,12 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                         //选中
                         if (alarm != null)
                             alarm.addDay(dayOfWeek);
-                        Log.d("data",String.valueOf(dayOfWeek));
+                        Log.d("data", String.valueOf(dayOfWeek));
 
                     } else {
                         int[] days = alarm.getDays();
                         //至少选择一项才允许取消
-                        if (days!=null&&days.length > 0) {
+                        if (days != null && days.length > 0) {
                             week.setTextColor(Color.BLACK);
                             week.setBackgroundColor(Color.WHITE);
                             //为取消
@@ -241,7 +222,6 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
 //        preferences.add(new AlarmPreference(Key.ALARM_ACTIVE, context.getString(R.string.AlarmStatus), null, null, alarm.getAlarmActive(), Type.BOOLEAN));
         preferences.add(new AlarmPreference(Key.ALARM_NAME, "标签", alarm.getAlarmName(), null, alarm.getAlarmName(), Type.EditText));
         preferences.add(new AlarmPreference(Key.ALARM_TIME, "时间", alarm.getAlarmTimeString(), null, alarm.getAlarmTime(), Type.TIME));
-        //TODO: 弄6个image button出来
         preferences.add(new AlarmPreference(Key.ALARM_REPEAT, "重复", "重复", repeatDays, alarm.getDays(), Type.MULTIPLE_ImageButton));
 
         Uri alarmToneUri = Uri.parse(alarm.getAlarmTonePath());
@@ -253,17 +233,12 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
             preferences.add(new AlarmPreference(Key.ALARM_TONE, "铃声", getAlarmTones()[0], alarmTones, null, Type.Ring));
         }
 
-        preferences.add(new AlarmPreference(Key.ALARM_VIBRATE, "振动", null, null, alarm.getVibrate(), Type.BOOLEAN));
+        preferences.add(new AlarmPreference(Key.ALARM_VIBRATE, "振动", null, null, alarm.IsVibrate(), Type.BOOLEAN));
     }
 
 
     public Context getContext() {
         return context;
-    }
-
-
-    public String[] getRepeatDays() {
-        return repeatDays;
     }
 
 

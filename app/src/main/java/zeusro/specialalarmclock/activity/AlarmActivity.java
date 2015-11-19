@@ -136,7 +136,6 @@ public class AlarmActivity extends BaseActivity {
 
     private void SetlistView() {
         mathAlarmListView = (ListView) findViewById(R.id.listView);
-        Log.d("debug", String.valueOf(mathAlarmListView != null));
         if (mathAlarmListView != null) {
             mathAlarmListView.setLongClickable(true);
             mathAlarmListView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -169,7 +168,6 @@ public class AlarmActivity extends BaseActivity {
             });
 
             callMathAlarmScheduleService();
-
             alarmListAdapter = new AlarmListAdapter(this);
             this.mathAlarmListView.setAdapter(alarmListAdapter);
             mathAlarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -180,7 +178,7 @@ public class AlarmActivity extends BaseActivity {
                     Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
                     Intent intent = new Intent(AlarmActivity.this, AlarmPreferencesActivity.class);
                     intent.putExtra("alarm", alarm);
-                    startActivity(intent);
+                    startActivityForResult(intent,0);
                 }
 
             });

@@ -115,7 +115,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
 
         if (alarm.getAlarmTonePath() != "") {
             mediaPlayer = new MediaPlayer();
-            if (alarm.getVibrate()) {
+            if (alarm.IsVibrate()) {
                 vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                 long[] pattern = {1000, 200, 200, 200};
                 vibrator.vibrate(pattern, 0);

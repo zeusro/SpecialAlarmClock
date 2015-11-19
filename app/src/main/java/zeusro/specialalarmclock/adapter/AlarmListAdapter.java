@@ -52,7 +52,7 @@ public class AlarmListAdapter extends BaseAdapter {
 
         Alarm alarm = (Alarm) getItem(position);
         CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox_alarm_active);
-        checkBox.setChecked(alarm.getAlarmActive());
+        checkBox.setChecked(alarm.IsAlarmActive());
         checkBox.setTag(position);
         checkBox.setOnClickListener(alarmActivity);
 

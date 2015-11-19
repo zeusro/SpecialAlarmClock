@@ -76,8 +76,23 @@ public class Alarm implements Serializable {
     /**
      * @return the alarmActive
      */
-    public Boolean getAlarmActive() {
+    public Boolean IsAlarmActive() {
         return alarmActive;
+    }
+
+    /**
+     * 这一天是否重复
+     * @param dayOfWeek
+     * @return
+     */
+    public boolean IsRepeat(int dayOfWeek) {
+        if (days == null || days.length < 1)
+            return false;
+        for (int i = 0; i < days.length; i++) {
+            if (days[i] == dayOfWeek)
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -93,9 +108,6 @@ public class Alarm implements Serializable {
     public Calendar getAlarmTime() {
         if (alarmTime.before(Calendar.getInstance()))
             alarmTime.add(Calendar.DAY_OF_MONTH, 1);
-//        while (!Arrays.asList(getDays()).contains(Calendar.()[alarmTime.get(Calendar.DAY_OF_WEEK) - 1])) {
-//            alarmTime.add(Calendar.DAY_OF_MONTH, 1);
-//        }
         return alarmTime;
     }
 
@@ -171,7 +183,7 @@ public class Alarm implements Serializable {
     /**
      * @return the vibrate
      */
-    public Boolean getVibrate() {
+    public Boolean IsVibrate() {
         return vibrate;
     }
 

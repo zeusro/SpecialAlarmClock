@@ -57,7 +57,7 @@ public class Database extends SQLiteOpenHelper {
 
     public static long create(Alarm alarm) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
+        cv.put(COLUMN_ALARM_ACTIVE, alarm.IsAlarmActive());
         cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
 
         try {
@@ -72,7 +72,7 @@ public class Database extends SQLiteOpenHelper {
         } catch (Exception e) {
         }
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
-        cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
+        cv.put(COLUMN_ALARM_VIBRATE, alarm.IsVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
 
         return getDatabase().insert(ALARM_TABLE, null, cv);
@@ -80,7 +80,7 @@ public class Database extends SQLiteOpenHelper {
 
     public static int update(Alarm alarm) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
+        cv.put(COLUMN_ALARM_ACTIVE, alarm.IsAlarmActive());
         cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
 
         try {
@@ -97,7 +97,7 @@ public class Database extends SQLiteOpenHelper {
 // FIXME: 2015/11/16 
 //        cv.put(COLUMN_ALARM_DIFFICULTY, alarm.getDifficulty().ordinal());
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
-        cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
+        cv.put(COLUMN_ALARM_VIBRATE, alarm.IsVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
 
         return getDatabase().update(ALARM_TABLE, cv, "_id=" + alarm.getId(), null);

@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,9 +40,10 @@ public class AlarmPreferencesActivity extends BaseActivity {
         setContentView(R.layout.preferences);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("alarm")) {
-            setMathAlarm((Alarm) bundle.getSerializable("alarm"));
+            //更新数据
+            alarm = ((Alarm) bundle.getSerializable("alarm"));
         } else {
-            setMathAlarm(new Alarm());
+            alarm = (new Alarm());
         }
         if (bundle != null && bundle.containsKey("adapter")) {
             setListAdapter((AlarmPreferenceListAdapter) bundle.getSerializable("adapter"));
@@ -60,7 +60,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                Log.d("alarmPreference.getType()", String.valueOf(alarmPreference.getType()));
                 switch (alarmPreference.getType()) {
                     case BOOLEAN:
                         CheckedTextView checkedTextView = (CheckedTextView) v;
@@ -162,10 +161,11 @@ public class AlarmPreferencesActivity extends BaseActivity {
 //        Log.d(data, String.valueOf(alarm.getVibrate()));
 
 //保存闹钟信息
-        int[] days = alarm.getDays();
-        if (days == null || days.length < 1) {
-            //todo: 当任何一天都不重复时,只提醒一次
-        }
+
+//        int[] days = alarm.getDays();
+//        if (days == null || days.length < 1) {
+//            //todo: 当任何一天都不重复时,只提醒一次
+//        }
         Database.init(getApplicationContext());
         if (alarm.getId() < 1) {
             Database.create(alarm);
@@ -202,11 +202,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
     }
 
 
-    public void setMathAlarm(Alarm alarm) {
-        this.alarm = alarm;
-    }
-
-
     public void setListAdapter(ListAdapter listAdapter) {
         this.listAdapter = listAdapter;
         getListView().setAdapter(listAdapter);
@@ -222,7 +217,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-        // super.onClick(v);
+         super.onClick(v);
 
     }
 }
