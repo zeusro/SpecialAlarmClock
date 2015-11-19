@@ -32,8 +32,9 @@ public class AlarmActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        Log.d("activity","onCreate");
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toast toast = Toast.makeText(this, R.string.Thank, Toast.LENGTH_SHORT);
         //显示toast信息
@@ -42,115 +43,41 @@ public class AlarmActivity extends BaseActivity {
         SetAddItem();
     }
 
-
-    private void SetAddItem() {
-        add = (ImageButton) findViewById(R.id.Add);
-        if (add != null) {
-            add.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent newAlarmIntent = new Intent(getApplicationContext(), AlarmPreferencesActivity.class);
-                    startActivityForResult(newAlarmIntent, 0);
-//                    startActivity(newAlarmIntent);
-                }
-
-            });
-        }
+    @Override
+    protected void onStop() {
+        Log.d("activity","onStop");
+        super.onStop();
     }
 
-
-    private void SetlistView() {
-        mathAlarmListView = (ListView) findViewById(R.id.listView);
-        Log.d("debug", String.valueOf(mathAlarmListView != null));
-        if (mathAlarmListView != null) {
-            mathAlarmListView.setLongClickable(true);
-            mathAlarmListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                    final Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
-                    Builder dialog = new AlertDialog.Builder(AlarmActivity.this);
-                    dialog.setTitle("Delete");
-                    dialog.setMessage("Delete this alarm?");
-                    dialog.setPositiveButton("Ok", new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            Database.init(AlarmActivity.this);
-                            Database.deleteEntry(alarm);
-                            AlarmActivity.this.callMathAlarmScheduleService();
-
-                            updateAlarmList();
-                        }
-                    });
-                    dialog.setNegativeButton("Cancel", new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
-                    return true;
-                }
-            });
-
-            callMathAlarmScheduleService();
-
-            alarmListAdapter = new AlarmListAdapter(this);
-            this.mathAlarmListView.setAdapter(alarmListAdapter);
-            mathAlarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                    Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
-                    Intent intent = new Intent(AlarmActivity.this, AlarmPreferencesActivity.class);
-                    intent.putExtra("alarm", alarm);
-                    startActivity(intent);
-                }
-
-            });
-        }
+    @Override
+    protected void onDestroy() {
+        Log.d("activity", "onDestroy");
+        super.onDestroy();
     }
-
-
-    public void updateAlarmList() {
-        Database.init(AlarmActivity.this);
-        final List<Alarm> alarms = Database.getAll();
-        alarmListAdapter.setMathAlarms(alarms);
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // reload content
-                AlarmActivity.this.alarmListAdapter.notifyDataSetChanged();
-                TextView text = (TextView) findViewById(R.id.textView);
-                if (alarms != null && alarms.size() > 0) {
-                    text.setVisibility(View.INVISIBLE);
-                } else {
-                    text.setText(R.string.NoClockAlert);
-                    text.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-
 
     @Override
     protected void onPause() {
+        Log.d("activity","onPause");
         Database.deactivate();
         super.onPause();
     }
 
     @Override
+    protected void onRestart() {
+        Log.d("activity", "onRestart");
+        super.onRestart();
+    }
+
+    @Override
     protected void onResume() {
+        Log.d("activity","onResume");
         super.onResume();
         updateAlarmList();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("activity","");
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("onActivityResult", String.valueOf(resultCode));
         switch (resultCode) {
@@ -188,5 +115,97 @@ public class AlarmActivity extends BaseActivity {
         }
     }
 
+
+
+    private void SetAddItem() {
+        add = (ImageButton) findViewById(R.id.Add);
+        if (add != null) {
+            add.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent newAlarmIntent = new Intent(getApplicationContext(), AlarmPreferencesActivity.class);
+                    startActivityForResult(newAlarmIntent, 0);
+//                    startActivity(newAlarmIntent);
+                }
+
+            });
+        }
+    }
+
+
+    private void SetlistView() {
+        mathAlarmListView = (ListView) findViewById(R.id.listView);
+        Log.d("debug", String.valueOf(mathAlarmListView != null));
+        if (mathAlarmListView != null) {
+            mathAlarmListView.setLongClickable(true);
+            mathAlarmListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    final Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
+                    Builder dialog = new AlertDialog.Builder(AlarmActivity.this);
+                    dialog.setTitle("删除");
+                    dialog.setMessage("删除这个闹钟?");
+                    dialog.setPositiveButton("取消", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.setNegativeButton("好", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Database.init(AlarmActivity.this);
+                            Database.deleteEntry(alarm);
+                            AlarmActivity.this.callMathAlarmScheduleService();
+                            updateAlarmList();
+                        }
+                    });
+                    dialog.show();
+                    return true;
+                }
+            });
+
+            callMathAlarmScheduleService();
+
+            alarmListAdapter = new AlarmListAdapter(this);
+            this.mathAlarmListView.setAdapter(alarmListAdapter);
+            mathAlarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                    Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
+                    Intent intent = new Intent(AlarmActivity.this, AlarmPreferencesActivity.class);
+                    intent.putExtra("alarm", alarm);
+                    startActivity(intent);
+                }
+
+            });
+        }
+    }
+
+
+    public void updateAlarmList() {
+        Database.init(AlarmActivity.this);
+        final List<Alarm> alarms = Database.getAll();
+        alarmListAdapter.setMathAlarms(alarms);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // reload content
+                AlarmActivity.this.alarmListAdapter.notifyDataSetChanged();
+                TextView text = (TextView) findViewById(R.id.textView);
+                if (alarms != null && alarms.size() > 0) {
+                    text.setVisibility(View.GONE);
+                } else {
+                    text.setText(R.string.NoClockAlert);
+                    text.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
 
 }

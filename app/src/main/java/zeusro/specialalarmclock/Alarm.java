@@ -8,6 +8,8 @@ import android.media.RingtoneManager;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import zeusro.specialalarmclock.receiver.AlarmAlertBroadcastReciever;
 
@@ -225,13 +227,13 @@ public class Alarm implements Serializable {
         long seconds = timeDifference / (1000) - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
         String alert = "闹钟将会在";
         if (days > 0) {
-            alert += String.format("%d 天, %d 小时, %d 分钟 %d 秒", days, hours, minutes, seconds);
+            alert += String.format("%d 天 %d 小时 %d 分钟 %d 秒", days, hours, minutes, seconds);
         } else {
             if (hours > 0) {
                 alert += String.format("%d 小时, %d 分钟 %d 秒", hours, minutes, seconds);
             } else {
                 if (minutes > 0) {
-                    alert += String.format("%d 分钟, %d 秒", minutes, seconds);
+                    alert += String.format("%d 分钟 %d 秒", minutes, seconds);
                 } else {
                     alert += String.format("%d 秒", seconds);
                 }
@@ -242,4 +244,24 @@ public class Alarm implements Serializable {
     }
 
 
+    public String getRepeatDaysString() {
+        if (days == null || days.length < 1)
+            return "只响一次";
+        Map<Integer, String> map = new HashMap<>(7);
+        map.put(Calendar.SUNDAY, "周日");
+        map.put(Calendar.MONDAY, "周一");
+        map.put(Calendar.TUESDAY, "周二");
+        map.put(Calendar.WEDNESDAY, "周三");
+        map.put(Calendar.THURSDAY, "周四");
+        map.put(Calendar.FRIDAY, "周五");
+        map.put(Calendar.SATURDAY, "周六");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < days.length; i++) {
+            if (map.containsKey(days[i])) {
+                sb.append(" " + map.get(days[i]));
+            }
+        }
+        return sb.toString();
+
+    }
 }

@@ -23,22 +23,24 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="38dp"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="10dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/Introduction"/>
+            android:text="@string/Introduction"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
         <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/bottom_menu"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="65dp"
-            android:longClickable="false"
-            android:headerDividersEnabled="false"
             android:id="@+id/listView"
-            android:textFilterEnabled="false"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="65dp"
+
+            android:longClickable="true"
+            android:layout_marginTop="0dp"
+            android:paddingTop="0dp"/>
+        <!--android:headerDividersEnabled="false"-->
+        <!--android:layout_above="@+id/bottom_menu"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:textFilterEnabled="false"-->
     </LinearLayout>
 
     <RelativeLayout

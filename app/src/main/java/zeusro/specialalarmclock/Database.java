@@ -30,7 +30,6 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_ALARM_ACTIVE = "alarm_active";
     public static final String COLUMN_ALARM_TIME = "alarm_time";
     public static final String COLUMN_ALARM_DAYS = "alarm_days";
-    public static final String COLUMN_ALARM_DIFFICULTY = "alarm_difficulty";
     public static final String COLUMN_ALARM_TONE = "alarm_tone";
     public static final String COLUMN_ALARM_VIBRATE = "alarm_vibrate";
     public static final String COLUMN_ALARM_NAME = "alarm_name";
@@ -72,8 +71,6 @@ public class Database extends SQLiteOpenHelper {
 
         } catch (Exception e) {
         }
-//FIXME:
-//        cv.put(COLUMN_ALARM_DIFFICULTY, alarm.getDifficulty().ordinal());
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
         cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
@@ -124,7 +121,6 @@ public class Database extends SQLiteOpenHelper {
                 COLUMN_ALARM_ACTIVE,
                 COLUMN_ALARM_TIME,
                 COLUMN_ALARM_DAYS,
-                COLUMN_ALARM_DIFFICULTY,
                 COLUMN_ALARM_TONE,
                 COLUMN_ALARM_VIBRATE,
                 COLUMN_ALARM_NAME
@@ -174,7 +170,6 @@ public class Database extends SQLiteOpenHelper {
                 COLUMN_ALARM_ACTIVE,
                 COLUMN_ALARM_TIME,
                 COLUMN_ALARM_DAYS,
-                COLUMN_ALARM_DIFFICULTY,
                 COLUMN_ALARM_TONE,
                 COLUMN_ALARM_VIBRATE,
                 COLUMN_ALARM_NAME
@@ -195,7 +190,6 @@ public class Database extends SQLiteOpenHelper {
                 + COLUMN_ALARM_ACTIVE + " INTEGER NOT NULL, "
                 + COLUMN_ALARM_TIME + " TEXT NOT NULL, "
                 + COLUMN_ALARM_DAYS + " BLOB NOT NULL, "
-                + COLUMN_ALARM_DIFFICULTY + " INTEGER NOT NULL, "
                 + COLUMN_ALARM_TONE + " TEXT NOT NULL, "
                 + COLUMN_ALARM_VIBRATE + " INTEGER NOT NULL, "
                 + COLUMN_ALARM_NAME + " TEXT NOT NULL)");
@@ -213,14 +207,6 @@ public class Database extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
 
             do {
-                // COLUMN_ALARM_ID,
-                // COLUMN_ALARM_ACTIVE,
-                // COLUMN_ALARM_TIME,
-                // COLUMN_ALARM_DAYS,
-                // COLUMN_ALARM_DIFFICULTY,
-                // COLUMN_ALARM_TONE,
-                // COLUMN_ALARM_VIBRATE,
-                // COLUMN_ALARM_NAME
 
                 Alarm alarm = new Alarm();
                 alarm.setId(cursor.getInt(0));
@@ -247,9 +233,9 @@ public class Database extends SQLiteOpenHelper {
 
                 // FIXME: 2015/11/16
 //                alarm.setDifficulty(Difficulty.values()[cursor.getInt(4)]);
-                alarm.setAlarmTonePath(cursor.getString(5));
-                alarm.setVibrate(cursor.getInt(6) == 1);
-                alarm.setAlarmName(cursor.getString(7));
+                alarm.setAlarmTonePath(cursor.getString(4));
+                alarm.setVibrate(cursor.getInt(5) == 1);
+                alarm.setAlarmName(cursor.getString(6));
 
                 alarms.add(alarm);
 

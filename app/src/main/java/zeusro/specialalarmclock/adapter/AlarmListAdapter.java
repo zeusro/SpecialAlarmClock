@@ -22,8 +22,7 @@ public class AlarmListAdapter extends BaseAdapter {
     private AlarmActivity alarmActivity;
     private List<Alarm> alarms = new ArrayList<Alarm>();
 
-    public static final String ALARM_FIELDS[] = {Database.COLUMN_ALARM_ACTIVE,
-            Database.COLUMN_ALARM_TIME, Database.COLUMN_ALARM_DAYS};
+    public static final String ALARM_FIELDS[] = {Database.COLUMN_ALARM_ACTIVE, Database.COLUMN_ALARM_TIME, Database.COLUMN_ALARM_DAYS};
 
     public AlarmListAdapter(AlarmActivity alarmActivity) {
         this.alarmActivity = alarmActivity;
@@ -62,8 +61,8 @@ public class AlarmListAdapter extends BaseAdapter {
 
 
         TextView alarmDaysView = (TextView) view.findViewById(R.id.textView_alarm_days);
-        // FIXME: 2015/11/16
-//        alarmDaysView.setText(alarm.getRepeatDaysString());
+
+        alarmDaysView.setText(alarm.getRepeatDaysString());
 
 
         return view;
