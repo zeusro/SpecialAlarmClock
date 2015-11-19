@@ -52,10 +52,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
 
         this.setTitle(alarm.getAlarmName());
 
-
         problemView = (TextView) findViewById(R.id.textView1);
-
-
         answerView = (TextView) findViewById(R.id.textView2);
         answerView.setText("= ?");
 
@@ -73,8 +70,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
         ((Button) findViewById(R.id.Button_decimal)).setOnClickListener(this);
         ((Button) findViewById(R.id.Button_minus)).setOnClickListener(this);
 
-        TelephonyManager telephonyManager = (TelephonyManager) this
-                .getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 
         PhoneStateListener phoneStateListener = new PhoneStateListener() {
             @Override
@@ -128,8 +124,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
             }
             try {
                 mediaPlayer.setVolume(1.0f, 1.0f);
-                mediaPlayer.setDataSource(this,
-                        Uri.parse(alarm.getAlarmTonePath()));
+                mediaPlayer.setDataSource(this, Uri.parse(alarm.getAlarmTonePath()));
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();

@@ -24,6 +24,6 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="ddd"/>
+        android:singleLine="false"/>
 
 </LinearLayout>

@@ -2,29 +2,26 @@ package zeusro.specialalarmclock.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.util.Calendar;
-
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
+import zeusro.specialalarmclock.Database;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmPreferenceListAdapter;
 
@@ -35,6 +32,8 @@ public class AlarmPreferencesActivity extends BaseActivity {
     private ListAdapter listAdapter;
     private ListView listView;
     private CountDownTimer alarmToneTimer;
+    private EditText tagText;
+    private TimePicker timePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +50,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
         } else {
             setListAdapter(new AlarmPreferenceListAdapter(this, alarm));
         }
-//        EditText tagText= (EditText) findViewById(R.id.tagText);
-//        if(tagText!=null){
-//            tagText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
-//        }
 
 
-        getListView().setItemsCanFocus(true);
+//        getListView().setItemsCanFocus(true);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
@@ -70,73 +60,8 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                Log.d("alarmPreference.getType()",String.valueOf(alarmPreference.getType()));
+                Log.d("alarmPreference.getType()", String.valueOf(alarmPreference.getType()));
                 switch (alarmPreference.getType()) {
-                    case TIME:
-                        TimePicker timePicker1 = (TimePicker) v.findViewById(R.id.timePicker);
-                        Toast toast = Toast.makeText(getBaseContext(),String.valueOf(timePicker1!=null) , Toast.LENGTH_SHORT);
-                        //显示toast信息
-                        toast.show();
-                        if (timePicker1 != null) {
-                            timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                                @Override
-                                public void onTimeChanged(TimePicker view, int hours, int minute) {
-                                    Calendar newAlarmTime = Calendar.getInstance();
-                                    newAlarmTime.set(Calendar.HOUR_OF_DAY, hours);
-                                    newAlarmTime.set(Calendar.MINUTE, minute);
-                                    newAlarmTime.set(Calendar.SECOND, 0);
-                                    alarm.setAlarmTime(newAlarmTime);
-                                    alarmPreferenceListAdapter.setMathAlarm(alarm);
-                                    alarmPreferenceListAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                        break;
-                    case MULTIPLE_ImageButton:
-
-                        break;
-//                    case MULTIPLE_ImageButton:
-//                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-//                        alert.setTitle(alarmPreference.getTitle());
-//                        CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
-//                        for (int i = 0; i < multiListItems.length; i++)
-//                            multiListItems[i] = alarmPreference.getOptions()[i];
-//                        boolean[] checkedItems = new boolean[multiListItems.length];
-//                        for (int day = 0; day < alarm.getDays().length; day++) {
-//                            checkedItems[day] = true;
-//                        }
-//                        alert.setMultiChoiceItems(multiListItems, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-//
-//                            @Override
-//                            public void onClick(final DialogInterface dialog, int which, boolean isChecked) {
-//
-//                                int thisDay = Alarm.Values()[which];
-//
-//                                if (isChecked) {
-//                                    alarm.addDay(thisDay);
-//                                } else {
-//                                    // Only remove the day if there are more than 1
-//                                    // selected
-//                                    if (alarm.getDays().length > 1) {
-//                                        alarm.removeDay(thisDay);
-//                                    } else {
-//                                        // If the last day was unchecked, re-check
-//                                        // it
-//                                        ((AlertDialog) dialog).getListView().setItemChecked(which, true);
-//                                    }
-//                                }
-//
-//                            }
-//                        });
-//                        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                            @Override
-//                            public void onCancel(DialogInterface dialog) {
-//                                alarmPreferenceListAdapter.setMathAlarm(alarm);
-//                                alarmPreferenceListAdapter.notifyDataSetChanged();
-//                            }
-//                        });
-//                        alert.show();
-//                        break;
                     case BOOLEAN:
                         CheckedTextView checkedTextView = (CheckedTextView) v;
                         boolean checked = !checkedTextView.isChecked();
@@ -152,76 +77,63 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         }
                         alarmPreference.setValue(checked);
                         break;
-                    case LIST:
+                    case Ring:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());
-                        // alert.setMessage(message);
                         CharSequence[] items = new CharSequence[alarmPreference.getOptions().length];
                         for (int i = 0; i < items.length; i++)
                             items[i] = alarmPreference.getOptions()[i];
-
                         alert.setItems(items, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                switch (alarmPreference.getKey()) {
-                                    // FIXME: 2015/11/16
-//                                    case ALARM_DIFFICULTY:
-//                                        Alarm.Difficulty d = Alarm.Difficulty.values()[which];
-//                                        alarm.setDifficulty(d);
-//                                        break;
-                                    case ALARM_TONE:
-                                        alarm.setAlarmTonePath(alarmPreferenceListAdapter.getAlarmTonePaths()[which]);
-                                        if (alarm.getAlarmTonePath() != null) {
-                                            if (mediaPlayer == null) {
-                                                mediaPlayer = new MediaPlayer();
-                                            } else {
-                                                if (mediaPlayer.isPlaying())
-                                                    mediaPlayer.stop();
-                                                mediaPlayer.reset();
+                                alarm.setAlarmTonePath(alarmPreferenceListAdapter.getAlarmTonePaths()[which]);
+                                if (alarm.getAlarmTonePath() != null) {
+                                    if (mediaPlayer == null) {
+                                        mediaPlayer = new MediaPlayer();
+                                    } else {
+                                        if (mediaPlayer.isPlaying())
+                                            mediaPlayer.stop();
+                                        mediaPlayer.reset();
+                                    }
+                                    try {
+                                        // mediaPlayer.setVolume(1.0f, 1.0f);
+                                        mediaPlayer.setVolume(0.2f, 0.2f);
+                                        mediaPlayer.setDataSource(AlarmPreferencesActivity.this, Uri.parse(alarm.getAlarmTonePath()));
+                                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                                        mediaPlayer.setLooping(false);
+                                        mediaPlayer.prepare();
+                                        mediaPlayer.start();
+
+                                        // Force the mediaPlayer to stop after 3
+                                        // seconds...
+                                        if (alarmToneTimer != null)
+                                            alarmToneTimer.cancel();
+                                        alarmToneTimer = new CountDownTimer(3000, 3000) {
+                                            @Override
+                                            public void onTick(long millisUntilFinished) {
+
                                             }
-                                            try {
-                                                // mediaPlayer.setVolume(1.0f, 1.0f);
-                                                mediaPlayer.setVolume(0.2f, 0.2f);
-                                                mediaPlayer.setDataSource(AlarmPreferencesActivity.this, Uri.parse(alarm.getAlarmTonePath()));
-                                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                                                mediaPlayer.setLooping(false);
-                                                mediaPlayer.prepare();
-                                                mediaPlayer.start();
 
-                                                // Force the mediaPlayer to stop after 3
-                                                // seconds...
-                                                if (alarmToneTimer != null)
-                                                    alarmToneTimer.cancel();
-                                                alarmToneTimer = new CountDownTimer(3000, 3000) {
-                                                    @Override
-                                                    public void onTick(long millisUntilFinished) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFinish() {
-                                                        try {
-                                                            if (mediaPlayer.isPlaying())
-                                                                mediaPlayer.stop();
-                                                        } catch (Exception e) {
-
-                                                        }
-                                                    }
-                                                };
-                                                alarmToneTimer.start();
-                                            } catch (Exception e) {
+                                            @Override
+                                            public void onFinish() {
                                                 try {
                                                     if (mediaPlayer.isPlaying())
                                                         mediaPlayer.stop();
-                                                } catch (Exception e2) {
+                                                } catch (Exception e) {
 
                                                 }
                                             }
+                                        };
+                                        alarmToneTimer.start();
+                                    } catch (Exception e) {
+                                        try {
+                                            if (mediaPlayer.isPlaying())
+                                                mediaPlayer.stop();
+                                        } catch (Exception e2) {
+
                                         }
-                                        break;
-                                    default:
-                                        break;
+                                    }
                                 }
                                 alarmPreferenceListAdapter.setMathAlarm(alarm);
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
@@ -240,12 +152,43 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
 
     @Override
+    public void onBackPressed() {
+
+//        String data = "data";
+//        Log.d(data, alarm.getAlarmName());
+//        Log.d(data, alarm.getAlarmTime().toString());
+//        Log.d(data, String.valueOf(alarm.getDays().length));
+//        Log.d(data, alarm.getAlarmTonePath());
+//        Log.d(data, String.valueOf(alarm.getVibrate()));
+
+//保存闹钟信息
+        int[] days = alarm.getDays();
+        if (days == null || days.length < 1) {
+            //todo: 当任何一天都不重复时,只提醒一次
+        }
+        Database.init(getApplicationContext());
+        if (alarm.getId() < 1) {
+            Database.create(alarm);
+        } else {
+            Database.update(alarm);
+        }
+        callMathAlarmScheduleService();
+        Toast.makeText(AlarmPreferencesActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
+//        Intent resultIntent = new Intent();
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("object", alarm);
+//        resultIntent.putExtras(bundle);
+//        setResult(RESULT_OK, resultIntent);
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("alarm", alarm);
         outState.putSerializable("adapter", (AlarmPreferenceListAdapter) listAdapter);
     }
 
-    ;
 
     @Override
     protected void onPause() {
@@ -257,9 +200,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
         }
         // setListAdapter(null);
     }
-
-
-
 
 
     public void setMathAlarm(Alarm alarm) {

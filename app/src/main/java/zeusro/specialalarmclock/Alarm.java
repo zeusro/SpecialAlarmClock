@@ -19,7 +19,7 @@ public class Alarm implements Serializable {
     private int id;
     private Boolean alarmActive = true;
     private Calendar alarmTime = Calendar.getInstance();
-    private int[] days = {Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};
+    private int[] days = {Calendar.SUNDAY, Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY,};
     private String alarmTonePath = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
     private Boolean vibrate = true;
     private String alarmName = "极简闹钟";
@@ -138,7 +138,6 @@ public class Alarm implements Serializable {
     }
 
 
-
     /**
      * @return the repeatDays
      */
@@ -224,24 +223,21 @@ public class Alarm implements Serializable {
         long hours = timeDifference / (1000 * 60 * 60) - (days * 24);
         long minutes = timeDifference / (1000 * 60) - (days * 24 * 60) - (hours * 60);
         long seconds = timeDifference / (1000) - (days * 24 * 60 * 60) - (hours * 60 * 60) - (minutes * 60);
-        String alert = "Alarm will sound in ";
+        String alert = "闹钟将会在";
         if (days > 0) {
-            alert += String.format(
-                    "%d days, %d hours, %d minutes and %d seconds", days,
-                    hours, minutes, seconds);
+            alert += String.format("%d 天, %d 小时, %d 分钟 %d 秒", days, hours, minutes, seconds);
         } else {
             if (hours > 0) {
-                alert += String.format("%d hours, %d minutes and %d seconds",
-                        hours, minutes, seconds);
+                alert += String.format("%d 小时, %d 分钟 %d 秒", hours, minutes, seconds);
             } else {
                 if (minutes > 0) {
-                    alert += String.format("%d minutes, %d seconds", minutes,
-                            seconds);
+                    alert += String.format("%d 分钟, %d 秒", minutes, seconds);
                 } else {
-                    alert += String.format("%d seconds", seconds);
+                    alert += String.format("%d 秒", seconds);
                 }
             }
         }
+        alert += "提醒";
         return alert;
     }
 

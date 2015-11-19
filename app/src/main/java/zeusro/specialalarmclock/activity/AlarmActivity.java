@@ -38,7 +38,6 @@ public class AlarmActivity extends BaseActivity {
         Toast toast = Toast.makeText(this, R.string.Thank, Toast.LENGTH_SHORT);
         //显示toast信息
         toast.show();
-
         SetlistView();
         SetAddItem();
     }
@@ -52,7 +51,8 @@ public class AlarmActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent newAlarmIntent = new Intent(getApplicationContext(), AlarmPreferencesActivity.class);
-                    startActivity(newAlarmIntent);
+                    startActivityForResult(newAlarmIntent, 0);
+//                    startActivity(newAlarmIntent);
                 }
 
             });
@@ -125,7 +125,7 @@ public class AlarmActivity extends BaseActivity {
             public void run() {
                 // reload content
                 AlarmActivity.this.alarmListAdapter.notifyDataSetChanged();
-                TextView text= (TextView)findViewById(R.id.textView);
+                TextView text = (TextView) findViewById(R.id.textView);
                 if (alarms != null && alarms.size() > 0) {
                     text.setVisibility(View.INVISIBLE);
                 } else {
@@ -147,6 +147,25 @@ public class AlarmActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         updateAlarmList();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("onActivityResult", String.valueOf(resultCode));
+        switch (resultCode) {
+            case RESULT_OK:
+                Bundle b = data.getExtras();
+                Alarm alarm =(Alarm) b.getSerializable("object");//回传的值
+                if (alarm!=null){
+                        Log.d("data", alarm.getAlarmName());
+
+                }
+
+                break;
+            default:
+                break;
+        }
     }
 
 

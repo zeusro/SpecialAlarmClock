@@ -1,70 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/WeekButton"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_Sunday"
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="日" />
+        android:linksClickable="false"
+        android:phoneNumber="false"
+        android:text="重复"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:layout_marginLeft="10dp"/>
 
-    <Button
-        android:id="@+id/btn_Monday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="一" />
+    <LinearLayout
+        android:id="@+id/WeekButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btn_Tuesday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="二" />
+        <Button
+            android:id="@+id/btn_Sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+            android:text="日"
+            android:clickable="true"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
 
-    <Button
-        android:id="@+id/btn_Webnesday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="三" />
+        <Button
+            android:id="@+id/btn_Monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+            android:text="一"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
 
-    <Button
-        android:id="@+id/btn_Thursday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="四" />
+        <Button
+            android:id="@+id/btn_Tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+            android:text="二"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
 
-    <Button
-        android:id="@+id/btn_Friday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="五" />
+        <Button
+            android:id="@+id/btn_Webnesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+            android:text="三"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
 
-    <Button
-        android:id="@+id/btn_Saturday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxWidth="45dp"
-        android:minWidth="45dp"
-        android:focusable="false"
-        android:text="六" />
+        <Button
+            android:id="@+id/btn_Thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+
+            android:text="四"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:id="@+id/btn_Friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+
+            android:text="五"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
+        <!-- button可能需要如此设置-->
+        <!--android:focusable="false"-->
+
+        <Button
+            android:id="@+id/btn_Saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:maxWidth="45dp"
+            android:minWidth="45dp"
+            android:text="六"
+            android:autoText="false"
+            android:background="#f9f6f6"
+            android:layout_marginLeft="10dp"/>
+
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -6,7 +6,7 @@ package zeusro.specialalarmclock;
 public enum Type{
     BOOLEAN,
     EditText,
-    LIST,
+    Ring,
     TIME,
     MULTIPLE_ImageButton,
 }
