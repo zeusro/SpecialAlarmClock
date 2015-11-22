@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/table_title_fix_cols"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:padding="0dip" />
+
+    <com.gdtel.eshore.operationaldata_lib.newtable.TableView4ScrollView_lib
+        android:id="@+id/table_title_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:scrollbars="none" 
+        android:layout_toRightOf="@+id/table_title_fix_cols"
+        android:layout_alignParentRight="true">
+
+        <RelativeLayout
+            android:id="@+id/table_title_slide_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:padding="0dip" />
+    </com.gdtel.eshore.operationaldata_lib.newtable.TableView4ScrollView_lib>
+</RelativeLayout>

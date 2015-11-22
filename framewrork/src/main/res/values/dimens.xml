@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="base_item_height">40dp</dimen>
+ <!--  -->
+    <dimen name="login_item_height">40dp</dimen>
+ <!--  -->
+
+    <dimen name="titile_font_size">18dp</dimen>
+ <!-- 标题文字大小 -->
+    <dimen name="body_font_size_14">14dp</dimen>
+ <!-- 主文本文字大小 -->
+    <dimen name="body_font_size_12">12dp</dimen>
+ <!-- 主文本文字大小 -->
+    <dimen name="body_font_size_10">10dp</dimen>
+ <!-- 主文本文字大小 -->
+    <dimen name="body_font_size_16">16dp</dimen>
+ <!-- 主文本文字大小 -->
+    <dimen name="login_font_size">18dp</dimen>
+ <!-- 登陆页面里面文字大小 -->
+
+    <dimen name="chart_font_size">12dp</dimen>
+ <!-- 图表里面文字大小 -->
+    <dimen name="chart_margins">50dp</dimen>
+    <dimen name="chart_point_size">3dp</dimen>
+    <dimen name="chart_line_size">1dp</dimen>
+    <dimen name="tv_line_size">1dp</dimen>
+    <dimen name="system_top_height">12dp</dimen>
+ <!-- 系统顶部栏高度(大约) -->
+
+    <dimen name="chart_values_textsize_12">12dp</dimen>
+    <dimen name="chart_values_spacing_7">7dp</dimen>
+    <dimen name="chart_display_values_distance_5">7dp</dimen>
+    <dimen name="chart_point_size_3">3dp</dimen>
+    <dimen name="chart_line_width_3">3dp</dimen>
+    <dimen name="chart_left_margin_6">6dp</dimen>
+    <dimen name="chart_label_text_size_10">10dp</dimen>
+    <dimen name="chart_legend_text_size_15">15dp</dimen>
+    <dimen name="chart_label_text_size_18">18dp</dimen>
+    <dimen name="chart_legend_text_size_20">20dp</dimen>
+    <dimen name="chart_axis_title_text_size_10">10dp</dimen>
+
+    <!-- 报表文字大小 -->
+    <dimen name="table_font_size">16dp</dimen>
+
+    <!-- ceo文字 -->
+    <dimen name="ceo_navi_txt_font">14dp</dimen>
+
+    <!-- 日历控件 -->
+    <dimen name="calendar_day_headers_paddingbottom">4dp</dimen>
+    <dimen name="calendar_month_topmargin">16dp</dimen>
+    <dimen name="calendar_month_title_bottommargin">4dp</dimen>
+    <dimen name="calendar_text_medium">18sp</dimen>
+    <dimen name="calendar_text_small">14sp</dimen>
+
+</resources>

@@ -1,0 +1,41 @@
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+	<RelativeLayout 
+	     android:id="@+id/left_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    android:layout_weight="1">
+		<include
+	        android:id="@+id/top"
+	        layout="@layout/common_top"
+	        android:layout_alignParentTop="true"
+	        />
+	    <TextView
+	        android:id="@+id/contend"
+	        android:layout_below="@+id/top"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/hello_world" />
+	</RelativeLayout>
+	<RelativeLayout 
+	    android:id="@+id/right_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    android:visibility="gone"
+	    android:layout_weight="2">
+	    <ListView
+	        android:id="@+id/listView"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:background="#3c4b55"
+	        android:cacheColorHint="@null"
+	        android:divider="@null"
+	        android:listSelector="@null" >
+	    </ListView>
+	</RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/selector_head_bg" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="0dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/subject_icon"
+                android:layout_width="25dip"
+                android:layout_height="20dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:background="@drawable/subject_icon_selector"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@null"
+                android:gravity="center_vertical|left"
+                android:padding="4dp"
+                android:text="返回"
+                android:textColor="#ffffff"
+                android:textSize="18dip"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:text="title"
+            android:textColor="#f1f1f1"
+            android:textSize="20dip" />
+
+        <Button
+            android:id="@+id/right_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:gravity="right|center_vertical"
+            android:text="完成"
+            android:textColor="#ffffff"
+            android:textSize="18dip"
+            android:layout_marginRight="8dp"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:background="#3782B7" />
+    </RelativeLayout>
+    <include 
+        android:id="@+id/refresh"
+        layout="@layout/refresh_layout"
+        android:visibility="gone"
+        />
+
+</LinearLayout>
