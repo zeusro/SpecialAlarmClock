@@ -1,58 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="zeusro.specialalarmclock"
-    android:versionName="1.0.0" >
+<manifest package="zeusro.specialalarmclock"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionName="1.0.0">
 
     <!-- 开机启动 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.AlarmActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
         <receiver
             android:name=".receiver.AlarmAlertBroadcastReciever"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
         </receiver>
         <receiver
             android:name=".receiver.AlarmServiceBroadcastReciever"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
         </receiver>
 
         <service
             android:name=".service.AlarmService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
         </service>
 
-        <activity android:name=".activity.AlarmAlertActivity" >
+        <activity android:name=".activity.AlarmAlertActivity">
         </activity>
-        <activity android:name=".activity.AlarmPreferencesActivity" >
+        <activity android:name=".activity.AlarmPreferencesActivity">
         </activity>
 
         <receiver
-            android:name=".receiver.PhoneStateChangedBroadcastReciever"
+            android:name=".receiver.BootReceiver"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
         </receiver>
     </application>
 

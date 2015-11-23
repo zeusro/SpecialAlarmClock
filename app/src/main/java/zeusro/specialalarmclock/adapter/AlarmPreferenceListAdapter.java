@@ -116,11 +116,11 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 final TimePicker timePicker1 = (TimePicker) convertView.findViewById(R.id.timePicker);
                 int oldHour = alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY);
                 int oldMinute =alarm.getAlarmTime().get(Calendar.MINUTE);
-                Log.d("hort", String.valueOf(oldHour));
-                final Calendar newAlarmTime = Calendar.getInstance();
                 timePicker1.setCurrentHour(oldHour);
                 timePicker1.setCurrentMinute(oldMinute);
                 notifyDataSetChanged();
+//                Log.d("hort", String.valueOf(oldHour));
+                final Calendar newAlarmTime = Calendar.getInstance();
                 if (timePicker1 != null) {
                     timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                         @Override

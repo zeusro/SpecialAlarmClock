@@ -37,4 +37,4 @@ captures/
 /.idea/
 .DS_Store
 
-
+/app/build/

@@ -12,10 +12,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import zeusro.specialalarmclock.Alarm;
@@ -31,8 +29,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
     private ListAdapter listAdapter;
     private ListView listView;
     private CountDownTimer alarmToneTimer;
-    private EditText tagText;
-    private TimePicker timePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
         }
 
 
-//        getListView().setItemsCanFocus(true);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
@@ -160,8 +155,8 @@ public class AlarmPreferencesActivity extends BaseActivity {
 //        Log.d(data, alarm.getAlarmTonePath());
 //        Log.d(data, String.valueOf(alarm.getVibrate()));
 
-//保存闹钟信息
 
+//保存闹钟信息
 //        int[] days = alarm.getDays();
 //        if (days == null || days.length < 1) {
 //            //todo: 当任何一天都不重复时,只提醒一次

@@ -24,6 +24,10 @@ import zeusro.specialalarmclock.Database;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmListAdapter;
 
+/**
+ * 主activity
+ *
+ */
 public class AlarmActivity extends BaseActivity {
 
     AlarmListAdapter alarmListAdapter;

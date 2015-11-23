@@ -30,9 +30,6 @@ public class Alarm implements Serializable {
 
     }
 
-    public static final int[] Values() {
-        return new int[]{Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY, Calendar.THURSDAY, Calendar.FRIDAY, Calendar.SATURDAY, Calendar.SUNDAY};
-    }
 
     public void addDay(int day) {
         boolean contains = false;
@@ -82,6 +79,7 @@ public class Alarm implements Serializable {
 
     /**
      * 这一天是否重复
+     *
      * @param dayOfWeek
      * @return
      */
@@ -106,8 +104,8 @@ public class Alarm implements Serializable {
      * @return the alarmTime
      */
     public Calendar getAlarmTime() {
-        if (alarmTime.before(Calendar.getInstance()))
-            alarmTime.add(Calendar.DAY_OF_MONTH, 1);
+//        if (alarmTime.before(Calendar.getInstance()))
+//            alarmTime.add(Calendar.DAY_OF_MONTH, 1);
         return alarmTime;
     }
 
@@ -142,7 +140,6 @@ public class Alarm implements Serializable {
     public void setAlarmTime(String alarmTime) {
 
         String[] timePieces = alarmTime.split(":");
-
         Calendar newAlarmTime = Calendar.getInstance();
         newAlarmTime.set(Calendar.HOUR_OF_DAY,
                 Integer.parseInt(timePieces[0]));
