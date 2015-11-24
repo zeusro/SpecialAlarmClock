@@ -94,8 +94,6 @@ public class Database extends SQLiteOpenHelper {
 
         } catch (Exception e) {
         }
-// FIXME: 2015/11/16 
-//        cv.put(COLUMN_ALARM_DIFFICULTY, alarm.getDifficulty().ordinal());
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
         cv.put(COLUMN_ALARM_VIBRATE, alarm.IsVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
@@ -154,8 +152,6 @@ public class Database extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
 
-            // FIXME: 2015/11/16
-//            alarm.setDifficulty(Difficulty.values()[c.getInt(5)]);
             alarm.setAlarmTonePath(c.getString(6));
             alarm.setVibrate(c.getInt(7) == 1);
             alarm.setAlarmName(c.getString(8));
@@ -184,7 +180,6 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ALARM_TABLE + " ( "
                 + COLUMN_ALARM_ID + " INTEGER primary key autoincrement, "
                 + COLUMN_ALARM_ACTIVE + " INTEGER NOT NULL, "
@@ -231,8 +226,6 @@ public class Database extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
-                // FIXME: 2015/11/16
-//                alarm.setDifficulty(Difficulty.values()[cursor.getInt(4)]);
                 alarm.setAlarmTonePath(cursor.getString(4));
                 alarm.setVibrate(cursor.getInt(5) == 1);
                 alarm.setAlarmName(cursor.getString(6));

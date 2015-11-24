@@ -33,6 +33,7 @@ public class AlarmService extends Service {
     }
 
     private Alarm getNext() {
+        //TODO:启动闹钟
         Set<Alarm> alarmQueue = new TreeSet<Alarm>(new Comparator<Alarm>() {
             @Override
             public int compare(Alarm lhs, Alarm rhs) {

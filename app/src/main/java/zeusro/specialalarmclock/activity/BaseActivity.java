@@ -26,7 +26,7 @@ public class BaseActivity extends AppCompatActivity implements android.view.View
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
             Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-            if(menuKeyField != null) {
+            if (menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);
             }
@@ -47,7 +47,6 @@ public class BaseActivity extends AppCompatActivity implements android.view.View
 
     /**
      * 设置闹钟服务
-     *
      */
     protected void callMathAlarmScheduleService() {
         Intent mathAlarmServiceIntent = new Intent(this, AlarmServiceBroadcastReciever.class);

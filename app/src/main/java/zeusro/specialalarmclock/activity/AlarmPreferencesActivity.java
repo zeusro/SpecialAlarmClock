@@ -169,6 +169,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
         }
         callMathAlarmScheduleService();
         Toast.makeText(AlarmPreferencesActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
+        //跨activity传值,用于测试
 //        Intent resultIntent = new Intent();
 //        Bundle bundle = new Bundle();
 //        bundle.putSerializable("object", alarm);
