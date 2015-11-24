@@ -34,7 +34,7 @@ import zeusro.specialalarmclock.Type;
  * Created by Z on 2015/11/16.
  */
 
-public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializable {
+public class AlarmSettingItemListAdapter extends BaseAdapter implements Serializable {
 
     private Context context;
     private Alarm alarm;
@@ -43,10 +43,10 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     private String[] alarmTones;
     private String[] alarmTonePaths;
 
-    public AlarmPreferenceListAdapter(Context context, Alarm alarm) {
+    public AlarmSettingItemListAdapter(Context context, Alarm alarm) {
         this.context = (context);
 
-        Log.d("AlarmPreferenceListAdapter", "Loading Ringtones...");
+        Log.d("AlarmSettingItemListAdapter", "Loading Ringtones...");
 
         RingtoneManager ringtoneMgr = new RingtoneManager(getContext());
         ringtoneMgr.setType(RingtoneManager.TYPE_ALARM);
@@ -63,7 +63,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 alarmTonePaths[alarmsCursor.getPosition() + 1] = ringtoneMgr.getRingtoneUri(alarmsCursor.getPosition()).toString();
             } while (alarmsCursor.moveToNext());
         }
-        Log.d("AlarmPreferenceListAdapter", "Finished Loading " + alarmTones.length + " Ringtones.");
+        Log.d("AlarmSettingItemListAdapter", "Finished Loading " + alarmTones.length + " Ringtones.");
         alarmsCursor.close();
         setMathAlarm(alarm);
     }

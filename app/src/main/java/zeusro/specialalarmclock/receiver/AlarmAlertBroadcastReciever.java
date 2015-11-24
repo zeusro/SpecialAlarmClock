@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.StaticWakeLock;
-import zeusro.specialalarmclock.activity.AlarmActivity;
+import zeusro.specialalarmclock.activity.AlarmAlertActivity;
 
 public class AlarmAlertBroadcastReciever extends BroadcastReceiver {
     public AlarmAlertBroadcastReciever() {
@@ -20,9 +20,9 @@ public class AlarmAlertBroadcastReciever extends BroadcastReceiver {
         StaticWakeLock.lockOn(context);
         Bundle bundle = intent.getExtras();
         final Alarm alarm = (Alarm) bundle.getSerializable("alarm");
-        Intent mathAlarmAlertActivityIntent = new Intent(context, AlarmActivity.class);
-        mathAlarmAlertActivityIntent.putExtra("alarm", alarm);
-        mathAlarmAlertActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(mathAlarmAlertActivityIntent);
+        Intent alarmAlertActivityIntent = new Intent(context, AlarmAlertActivity.class);
+        alarmAlertActivityIntent.putExtra("alarm", alarm);
+        alarmAlertActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(alarmAlertActivityIntent);
     }
 }

@@ -55,6 +55,18 @@
             android:enabled="true"
             android:exported="true">
         </receiver>
+
+        <service
+            android:name=".service.SchedulingService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+
+        <receiver
+            android:name=".receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
     </application>
 
 </manifest>

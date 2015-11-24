@@ -1,4 +1,4 @@
-package anroidframework.eshore.gdtel.com.alarmtestmodule;
+package zeusro.specialalarmclock.service;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -15,8 +15,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SampleSchedulingService extends IntentService {
-    public SampleSchedulingService() {
+import zeusro.specialalarmclock.R;
+import zeusro.specialalarmclock.activity.AlarmActivity;
+import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
+
+public class SchedulingService extends IntentService {
+    public SchedulingService() {
         super("SchedulingService");
     }
 
@@ -45,20 +49,20 @@ public class SampleSchedulingService extends IntentService {
         try {
             result = loadFromNetwork(urlString);
         } catch (IOException e) {
-            Log.i(TAG, getString(R.string.connection_error));
+            Log.i(TAG, ("connection_error"));
         }
 
         // If the app finds the string "doodle" in the Google home page content, it
         // indicates the presence of a doodle. Post a "Doodle Alert" notification.
         if (result.indexOf(SEARCH_STRING) != -1) {
-            sendNotification(getString(R.string.doodle_found));
+            sendNotification(("doodle_found"));
             Log.i(TAG, "Found doodle!!");
         } else {
-            sendNotification(getString(R.string.no_doodle));
+            sendNotification(("doodle_found"));
             Log.i(TAG, "No doodle found. :-(");
         }
         // Release the wake lock provided by the BroadcastReceiver.
-        SampleAlarmReceiver.completeWakefulIntent(intent);
+        AlarmServiceBroadcastReciever.completeWakefulIntent(intent);
         // END_INCLUDE(service_onhandle)
     }
 
@@ -67,11 +71,11 @@ public class SampleSchedulingService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, AlarmActivity.class), 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(getString(R.string.doodle_alert))
+                .setSmallIcon(R.mipmap.app_icon)
+                .setContentTitle(("起床啦"))
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(msg))
                 .setContentText(msg);
@@ -142,4 +146,3 @@ public class SampleSchedulingService extends IntentService {
         return builder.toString();
     }
 }
-

@@ -20,7 +20,7 @@ import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.AlarmPreference;
 import zeusro.specialalarmclock.Database;
 import zeusro.specialalarmclock.R;
-import zeusro.specialalarmclock.adapter.AlarmPreferenceListAdapter;
+import zeusro.specialalarmclock.adapter.AlarmSettingItemListAdapter;
 
 public class AlarmPreferencesActivity extends BaseActivity {
 
@@ -42,16 +42,16 @@ public class AlarmPreferencesActivity extends BaseActivity {
             alarm = (new Alarm());
         }
         if (bundle != null && bundle.containsKey("adapter")) {
-            setListAdapter((AlarmPreferenceListAdapter) bundle.getSerializable("adapter"));
+            setListAdapter((AlarmSettingItemListAdapter) bundle.getSerializable("adapter"));
         } else {
-            setListAdapter(new AlarmPreferenceListAdapter(this, alarm));
+            setListAdapter(new AlarmSettingItemListAdapter(this, alarm));
         }
 
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-                final AlarmPreferenceListAdapter alarmPreferenceListAdapter = (AlarmPreferenceListAdapter) listAdapter;
+                final AlarmSettingItemListAdapter alarmPreferenceListAdapter = (AlarmSettingItemListAdapter) listAdapter;
                 final AlarmPreference alarmPreference = (AlarmPreference) alarmPreferenceListAdapter.getItem(position);
                 AlertDialog.Builder alert;
                 v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -182,7 +182,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putSerializable("alarm", alarm);
-        outState.putSerializable("adapter", (AlarmPreferenceListAdapter) listAdapter);
+        outState.putSerializable("adapter", (AlarmSettingItemListAdapter) listAdapter);
     }
 
 
