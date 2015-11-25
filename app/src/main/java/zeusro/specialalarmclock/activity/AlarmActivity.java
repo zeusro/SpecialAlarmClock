@@ -37,51 +37,51 @@ public class AlarmActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.d("activity","onCreate");
+//        Log.d("activity","onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toast toast = Toast.makeText(this, R.string.Thank, Toast.LENGTH_SHORT);
         //显示toast信息
         toast.show();
         SetlistView();
-        SetAddItem();
+        SetAddButton();
     }
 
     @Override
     protected void onStop() {
-        Log.d("activity","onStop");
+//        Log.d("activity","onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d("activity", "onDestroy");
+//        Log.d("activity", "onDestroy");
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        Log.d("activity","onPause");
+//        Log.d("activity","onPause");
         Database.deactivate();
         super.onPause();
     }
 
     @Override
     protected void onRestart() {
-        Log.d("activity", "onRestart");
+//        Log.d("activity", "onRestart");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
-        Log.d("activity","onResume");
+//        Log.d("activity","onResume");
         super.onResume();
         updateAlarmList();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("activity","");
+//        Log.d("activity","onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("onActivityResult", String.valueOf(resultCode));
         switch (resultCode) {
@@ -121,7 +121,7 @@ public class AlarmActivity extends BaseActivity {
 
 
 
-    private void SetAddItem() {
+    private void SetAddButton() {
         add = (ImageButton) findViewById(R.id.Add);
         if (add != null) {
             add.setOnClickListener(new View.OnClickListener() {

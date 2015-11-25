@@ -2,9 +2,12 @@ package zeusro.specialalarmclock;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
+import android.os.SystemClock;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import zeusro.specialalarmclock.receiver.AlarmAlertBroadcastReciever;
+import zeusro.specialalarmclock.receiver.BootReceiver;
 
 /**
  * Created by Z on 2015/11/16.
@@ -214,18 +218,33 @@ public class Alarm implements Serializable {
         this.id = id;
     }
 
-
     public void schedule(Context context) {
         setAlarmActive(true);
-
         Intent myIntent = new Intent(context, AlarmAlertBroadcastReciever.class);
         myIntent.putExtra("alarm", this);
-
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, getAlarmTime().getTimeInMillis(), pendingIntent);
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, getAlarmTime().getTimeInMillis(), pendingIntent);
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context, AlarmServiceBroadcastReciever.class);
+//        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//        Alarm alarm = getNext(context);
+
+        Calendar calendar = getAlarmTime();
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, context);
+        // Wake up the device to fire the alarm in 30 minutes, and every 30 minutes
+        // after that.
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_HALF_HOUR, context);
+        // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
+        // device is rebooted.
+        ComponentName receiver = new ComponentName(context, BootReceiver.class);
+        PackageManager pm = context.getPackageManager();
+        //可用状态
+        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
     }
 
     public String getTimeUntilNextAlarmMessage() {

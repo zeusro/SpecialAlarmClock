@@ -18,6 +18,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class AlarmSettingItemListAdapter extends BaseAdapter implements Serializ
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d("tagText", "getViewAgain");
+//        Log.d("tagText", "getViewAgain");
         AlarmPreference alarmPreference = (AlarmPreference) getItem(position);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         switch (alarmPreference.getType()) {
@@ -115,12 +116,20 @@ public class AlarmSettingItemListAdapter extends BaseAdapter implements Serializ
                     convertView = layoutInflater.inflate(R.layout.time_picker, null);
                 final TimePicker timePicker1 = (TimePicker) convertView.findViewById(R.id.timePicker);
                 int oldHour = alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY);
-                int oldMinute =alarm.getAlarmTime().get(Calendar.MINUTE);
-                timePicker1.setCurrentHour(oldHour);
-                timePicker1.setCurrentMinute(oldMinute);
+                int oldMinute = alarm.getAlarmTime().get(Calendar.MINUTE);
+                Toast tt = new Toast(getContext());
+                //// FIXME: 2015/11/25 正式环境改回去
+//                timePicker1.setCurrentHour(oldHour);
+//                timePicker1.setCurrentMinute(oldMinute);
                 notifyDataSetChanged();
-//                Log.d("hort", String.valueOf(oldHour));
                 final Calendar newAlarmTime = Calendar.getInstance();
+                //comment
+                timePicker1.setCurrentHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                timePicker1.setCurrentMinute(Calendar.getInstance().get(Calendar.MINUTE) + 1);
+                newAlarmTime.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+                newAlarmTime.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE) + 1);
+                alarm.setAlarmTime(newAlarmTime);
+                //comment
                 if (timePicker1 != null) {
                     timePicker1.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                         @Override

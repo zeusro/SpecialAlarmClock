@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="zeusro.specialalarmclock"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionName="1.0.0">
+<manifest
+    package="zeusro.specialalarmclock"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionName="1.0.0">
 
     <!-- 开机启动 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -28,10 +29,19 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.AlarmAlertActivity">
+        </activity>
+        <activity android:name=".activity.AlarmPreferencesActivity">
+        </activity>
+
+
         <receiver
             android:name=".receiver.AlarmAlertBroadcastReciever"
             android:enabled="true"
             android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
         <receiver
             android:name=".receiver.AlarmServiceBroadcastReciever"
@@ -45,15 +55,13 @@
             android:exported="false">
         </service>
 
-        <activity android:name=".activity.AlarmAlertActivity">
-        </activity>
-        <activity android:name=".activity.AlarmPreferencesActivity">
-        </activity>
-
         <receiver
             android:name=".receiver.BootReceiver"
             android:enabled="true"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
         </receiver>
 
         <service

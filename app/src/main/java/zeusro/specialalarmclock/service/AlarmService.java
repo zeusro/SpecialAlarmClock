@@ -33,7 +33,6 @@ public class AlarmService extends Service {
     }
 
     private Alarm getNext() {
-        //TODO:启动闹钟
         Set<Alarm> alarmQueue = new TreeSet<Alarm>(new Comparator<Alarm>() {
             @Override
             public int compare(Alarm lhs, Alarm rhs) {
@@ -88,10 +87,8 @@ public class AlarmService extends Service {
         } else {
             Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReciever.class);
             myIntent.putExtra("alarm", new Alarm());
-
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
             alarmManager.cancel(pendingIntent);
         }
         return START_NOT_STICKY;
