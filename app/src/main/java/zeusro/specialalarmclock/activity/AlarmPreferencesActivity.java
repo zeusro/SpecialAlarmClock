@@ -213,7 +213,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-         super.onClick(v);
+        super.onClick(v);
 
     }
 }

@@ -13,8 +13,8 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            Log.d(this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
             alarm.setAlarm(context);
         }
     }

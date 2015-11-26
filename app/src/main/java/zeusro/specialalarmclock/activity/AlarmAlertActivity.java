@@ -1,22 +1,14 @@
 package zeusro.specialalarmclock.activity;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.R;
@@ -32,76 +24,72 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
 
     private boolean alarmActive;
 
-    private TextView problemView;
-    private TextView answerView;
-    private String answerString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
         setContentView(R.layout.alert);
 
         Bundle bundle = this.getIntent().getExtras();
         alarm = (Alarm) bundle.getSerializable("alarm");
+        Log.d(this.getClass().getSimpleName(), String.valueOf(alarm != null));
+        if (null != alarm)
+            Log.d(this.getClass().getSimpleName(), String.valueOf(alarm.getAlarmTime().getTime().toString()));
 
-        this.setTitle(alarm.getAlarmName());
-
-        problemView = (TextView) findViewById(R.id.textView1);
-        answerView = (TextView) findViewById(R.id.textView2);
-        answerView.setText("= ?");
-
-        ((Button) findViewById(R.id.Button0)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button1)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button2)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button3)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button4)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button5)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button6)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button7)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button8)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button9)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button_clear)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button_decimal)).setOnClickListener(this);
-        ((Button) findViewById(R.id.Button_minus)).setOnClickListener(this);
-
-        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-
-        PhoneStateListener phoneStateListener = new PhoneStateListener() {
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                switch (state) {
-                    case TelephonyManager.CALL_STATE_RINGING:
-                        Log.d(getClass().getSimpleName(), "Incoming call: "
-                                + incomingNumber);
-                        try {
-                            mediaPlayer.pause();
-                        } catch (IllegalStateException e) {
-
-                        }
-                        break;
-                    case TelephonyManager.CALL_STATE_IDLE:
-                        Log.d(getClass().getSimpleName(), "Call State Idle");
-                        try {
-                            mediaPlayer.start();
-                        } catch (IllegalStateException e) {
-
-                        }
-                        break;
-                }
-                super.onCallStateChanged(state, incomingNumber);
-            }
-        };
-
-        telephonyManager.listen(phoneStateListener,
-                PhoneStateListener.LISTEN_CALL_STATE);
-
-        // Toast.makeText(this, answerString, Toast.LENGTH_LONG).show();
-
-        startAlarm();
+//        this.setTitle(alarm.getAlarmName());
+//
+//        problemView = (TextView) findViewById(R.id.textView1);
+//        answerView = (TextView) findViewById(R.id.textView2);
+//        answerView.setText("= ?");
+//
+//        ((Button) findViewById(R.id.Button0)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button1)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button2)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button3)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button4)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button5)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button6)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button7)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button8)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button9)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button_clear)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button_decimal)).setOnClickListener(this);
+//        ((Button) findViewById(R.id.Button_minus)).setOnClickListener(this);
+//
+//        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+//
+//        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+//            @Override
+//            public void onCallStateChanged(int state, String incomingNumber) {
+//                switch (state) {
+//                    case TelephonyManager.CALL_STATE_RINGING:
+//                        Log.d(getClass().getSimpleName(), "Incoming call: "
+//                                + incomingNumber);
+//                        try {
+//                            mediaPlayer.pause();
+//                        } catch (IllegalStateException e) {
+//
+//                        }
+//                        break;
+//                    case TelephonyManager.CALL_STATE_IDLE:
+//                        Log.d(getClass().getSimpleName(), "Call State Idle");
+//                        try {
+//                            mediaPlayer.start();
+//                        } catch (IllegalStateException e) {
+//
+//                        }
+//                        break;
+//                }
+//                super.onCallStateChanged(state, incomingNumber);
+//            }
+//        };
+//
+//        telephonyManager.listen(phoneStateListener,
+//                PhoneStateListener.LISTEN_CALL_STATE);
+//
+//        // Toast.makeText(this, answerString, Toast.LENGTH_LONG).show();
+//
+//        startAlarm();
 
     }
 
@@ -188,23 +176,19 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
         if (button.equalsIgnoreCase("clear")) {
             if (answerBuilder.length() > 0) {
                 answerBuilder.setLength(answerBuilder.length() - 1);
-                answerView.setText(answerBuilder.toString());
             }
         } else if (button.equalsIgnoreCase(".")) {
             if (!answerBuilder.toString().contains(button)) {
                 if (answerBuilder.length() == 0)
                     answerBuilder.append(0);
                 answerBuilder.append(button);
-                answerView.setText(answerBuilder.toString());
             }
         } else if (button.equalsIgnoreCase("-")) {
             if (answerBuilder.length() == 0) {
                 answerBuilder.append(button);
-                answerView.setText(answerBuilder.toString());
             }
         } else {
             answerBuilder.append(button);
-            answerView.setText(answerBuilder.toString());
             if (isAnswerCorrect()) {
                 alarmActive = false;
                 if (vibrator != null)
@@ -222,12 +206,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
                 this.finish();
             }
         }
-        if (answerView.getText().length() >= answerString.length()
-                && !isAnswerCorrect()) {
-            answerView.setTextColor(Color.RED);
-        } else {
-            answerView.setTextColor(Color.BLACK);
-        }
+
     }
 
     public boolean isAnswerCorrect() {

@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -33,7 +32,7 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+        Log.d(context.getPackageName(), Thread.currentThread().getStackTrace()[2].getMethodName());
         Intent service = new Intent(context, SchedulingService.class);
         // Start the service, keeping the device awake while it is launching.
         startWakefulService(context, service);
@@ -41,27 +40,35 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
     }
 
     public void setAlarm(Context context) {
-        alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Log.d(context.getPackageName(), Thread.currentThread().getStackTrace()[2].getMethodName());
         Intent intent = new Intent(context, AlarmServiceBroadcastReciever.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         Alarm alarm = getNext(context);
-        if (null != alarm) {
+        if (alarm != null) {
             Calendar calendar = alarm.getAlarmTime();
-            alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, alarmIntent);
-            // Wake up the device to fire the alarm in 30 minutes, and every 30 minutes
-            // after that.
-            alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_HALF_HOUR, alarmIntent);
+            Calendar now = (Calendar) calendar.clone();
+            now.set(Calendar.HOUR_OF_DAY, Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            now.set(Calendar.MINUTE, Calendar.getInstance().get(Calendar.MINUTE));
+            now.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
+            if (now.getTimeInMillis() > calendar.getTimeInMillis()) {
+                CancelAlarm(context);
+                return;
+            }
+            alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//            Log.d(this.getClass().getSimpleName(), calendar.getTime().toString());
+//            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),  AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
             // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
             // device is rebooted.
             ComponentName receiver = new ComponentName(context, BootReceiver.class);
             PackageManager pm = context.getPackageManager();
             //可用状态
             pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-        } else {
-            CancelAlarm(context);
+            return;
         }
+        Log.d(context.getPackageName(), "没有闹钟");
+        CancelAlarm(context);
+
     }
 
 
@@ -72,22 +79,18 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
      */
     // BEGIN_INCLUDE(cancel_alarm)
     public void CancelAlarm(Context context) {
-        Intent myIntent = new Intent(context, AlarmAlertBroadcastReciever.class);
-        myIntent.putExtra("alarm", new Alarm());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-
-//        Log.d("ddd", "ddp");
-//        // If the alarm has been set, cancel it.
-//        if (alarmMgr != null) {
-//            alarmMgr.cancel(alarmIntent);
-//        }
+        // If the alarm has been set, cancel it.
+        if (alarmMgr != null) {
+            alarmMgr.cancel(alarmIntent);
+        }
         // Disable {@code SampleBootReceiver} so that it doesn't automatically restart the
         // alarm when the device is rebooted.
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
         PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 
