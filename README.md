@@ -15,8 +15,12 @@
 显示闹钟列表| √|2015-11-19 |
 移植删除/激活 |√ |2015-11-19 |
 编辑闹钟|√ |2015-11-19 |
+调整取消闹钟的界面| | |
+设置取消闹钟的提示| | |
 调整取消闹钟的功能| | |
-测试| | |
+提前取消闹钟| | |
+设置闹钟的重复| | |
+测试各种情况（重启，锁屏）下闹钟的表现| | |
 设置| | |
 | | |
 | | |
@@ -29,9 +33,10 @@
 
 ## improve：
 
-1. 系统静态广播,点击广播提前取消闹钟
+1. 系统静态广播,点击广播提前取消闹钟。该静态广播只在凌晨5点后出现
 1. 假期自动跳过;
 1. 选取铃声作为闹钟声音
+1. 改进闹钟的取消方式
 
 ## 参考项目：
 
@@ -44,3 +49,5 @@ https://github.com/yuriykulikov/AlarmClock
 https://github.com/bedditor/ohtu-Alarmclock
 
 https://github.com/isaacloud/android-alarm-clock
+
+http://javatechig.com/android/repeat-alarm-example-in-android
