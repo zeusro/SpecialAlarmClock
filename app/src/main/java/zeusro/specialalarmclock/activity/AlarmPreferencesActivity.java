@@ -147,7 +147,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
 //        String data = "data";
 //        Log.d(data, alarm.getAlarmName());
 //        Log.d(data, alarm.getAlarmTime().toString());
@@ -167,7 +166,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
         } else {
             Database.update(alarm);
         }
-        callMathAlarmScheduleService();
+        CallAlarmServiceBroadcastReciever(alarm);
         Toast.makeText(AlarmPreferencesActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
         //跨activity传值,用于测试
 //        Intent resultIntent = new Intent();
@@ -175,6 +174,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 //        bundle.putSerializable("object", alarm);
 //        resultIntent.putExtras(bundle);
 //        setResult(RESULT_OK, resultIntent);
+        ReleaseMusicPlayer();
         super.onBackPressed();
         finish();
     }
@@ -190,8 +190,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         try {
-            if (mediaPlayer != null)
-                mediaPlayer.release();
+            ReleaseMusicPlayer();
         } catch (Exception e) {
         }
         // setListAdapter(null);
@@ -215,6 +214,12 @@ public class AlarmPreferencesActivity extends BaseActivity {
     public void onClick(View v) {
         super.onClick(v);
 
+    }
+
+    private void ReleaseMusicPlayer() {
+        if (mediaPlayer != null)
+            mediaPlayer.release();
+        mediaPlayer = null;
     }
 }
 

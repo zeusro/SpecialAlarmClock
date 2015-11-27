@@ -29,35 +29,15 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert);
-
         Bundle bundle = this.getIntent().getExtras();
         alarm = (Alarm) bundle.getSerializable("alarm");
         Log.d(this.getClass().getSimpleName(), String.valueOf(alarm != null));
-        if (null != alarm)
+        if (null != alarm) {
             Log.d(this.getClass().getSimpleName(), String.valueOf(alarm.getAlarmTime().getTime().toString()));
+            this.setTitle(alarm.getAlarmName());
 
-//        this.setTitle(alarm.getAlarmName());
-//
-//        problemView = (TextView) findViewById(R.id.textView1);
-//        answerView = (TextView) findViewById(R.id.textView2);
-//        answerView.setText("= ?");
-//
-//        ((Button) findViewById(R.id.Button0)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button1)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button2)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button3)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button4)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button5)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button6)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button7)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button8)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button9)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button_clear)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button_decimal)).setOnClickListener(this);
-//        ((Button) findViewById(R.id.Button_minus)).setOnClickListener(this);
-//
+        }
 //        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-//
 //        PhoneStateListener phoneStateListener = new PhoneStateListener() {
 //            @Override
 //            public void onCallStateChanged(int state, String incomingNumber) {

@@ -2,6 +2,7 @@ package zeusro.specialalarmclock.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.activity.AlarmAlertActivity;
@@ -14,6 +15,8 @@ public class SchedulingService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(this.getClass().getSimpleName(),Thread.currentThread().getStackTrace()[2].getMethodName());
+        Log.d(this.getClass().getSimpleName(),String.valueOf(intent.getAction()));
         final Alarm alarm = (Alarm) intent.getExtras().getSerializable("alarm");
         Intent alarmAlertActivityIntent = new Intent(getApplicationContext(), AlarmAlertActivity.class);
         alarmAlertActivityIntent.putExtra("alarm", alarm);

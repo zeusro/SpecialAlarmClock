@@ -112,7 +112,7 @@ public class AlarmActivity extends BaseActivity {
             Alarm alarm = (Alarm) alarmListAdapter.getItem((Integer) checkBox.getTag());
             alarm.setAlarmActive(checkBox.isChecked());
             Database.update(alarm);
-            AlarmActivity.this.callMathAlarmScheduleService();
+            AlarmActivity.this.CallAlarmServiceBroadcastReciever(alarm);
             if (checkBox.isChecked()) {
                 Toast.makeText(AlarmActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
             }
@@ -162,7 +162,8 @@ public class AlarmActivity extends BaseActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Database.init(AlarmActivity.this);
                             Database.deleteEntry(alarm);
-                            AlarmActivity.this.callMathAlarmScheduleService();
+                            //取消
+                            AlarmActivity.this.CancelAlarmServiceBroadcastReciever();
                             updateAlarmList();
                         }
                     });
@@ -170,8 +171,7 @@ public class AlarmActivity extends BaseActivity {
                     return true;
                 }
             });
-
-            callMathAlarmScheduleService();
+            CallAlarmServiceBroadcastReciever(null);
             alarmListAdapter = new AlarmListAdapter(this);
             this.mathAlarmListView.setAdapter(alarmListAdapter);
             mathAlarmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

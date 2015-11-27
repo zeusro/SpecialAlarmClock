@@ -8,6 +8,7 @@ import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
 
+import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
 
@@ -15,6 +16,8 @@ import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
  * Created by Z on 2015/11/16.
  */
 public class BaseActivity extends AppCompatActivity implements android.view.View.OnClickListener {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +47,21 @@ public class BaseActivity extends AppCompatActivity implements android.view.View
 
     }
 
+
+    protected void  CancelAlarmServiceBroadcastReciever(){
+        AlarmServiceBroadcastReciever reciever = new AlarmServiceBroadcastReciever();
+        reciever.CancelAlarm(this);
+    }
+
     /**
      * 设置闹钟服务
      */
-    protected void callMathAlarmScheduleService() {
+    protected void CallAlarmServiceBroadcastReciever(Alarm alarm) {
+
 //        Intent serviceIntent = new Intent(this, AlarmService.class);
 //        this.startService(serviceIntent);
         AlarmServiceBroadcastReciever reciever = new AlarmServiceBroadcastReciever();
-        reciever.setAlarm(this);
+        reciever.setAlarm(this, alarm);
 //        bindService()
 
 //        Intent serviceIntent = new Intent(this, AlarmServiceBroadcastReciever.class);

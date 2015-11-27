@@ -15,7 +15,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            alarm.setAlarm(context);
+            alarm.setAlarm(context, null);
         }
     }
 }
