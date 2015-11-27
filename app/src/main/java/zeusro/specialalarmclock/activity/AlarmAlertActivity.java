@@ -1,28 +1,28 @@
 package zeusro.specialalarmclock.activity;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.view.HapticFeedbackConstants;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.StaticWakeLock;
+import zeusro.specialalarmclock.receiver.AlarmServiceBroadcastReciever;
 import zeusro.specialalarmclock.view.SlideView;
 
 public class AlarmAlertActivity extends AppCompatActivity implements View.OnClickListener {
     private Alarm alarm;
     private MediaPlayer mediaPlayer;
-
-    private StringBuilder answerBuilder = new StringBuilder();
-
     private Vibrator vibrator;
-
     private boolean alarmActive;
 
 
@@ -37,49 +37,51 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
                 this.setTitle(alarm.getAlarmName());
             }
         }
+        SetSlideView();
+        SetTelephonyStateChangedListener();
+        startAlarm();
+    }
+
+    private void SetTelephonyStateChangedListener() {
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                switch (state) {
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        Log.d(getClass().getSimpleName(), "Incoming call: " + incomingNumber);
+                        try {
+                            mediaPlayer.pause();
+                        } catch (IllegalStateException e) {
+
+                        }
+                        break;
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        Log.d(getClass().getSimpleName(), "Call State Idle");
+                        try {
+                            mediaPlayer.start();
+                        } catch (IllegalStateException e) {
+
+                        }
+                        break;
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+    private void SetSlideView() {
         SlideView slideView = (SlideView) findViewById(R.id.slider);
         slideView.setSlideListener(new SlideView.SlideListener() {
             @Override
             public void onDone() {
-
-                Toast.makeText(AlarmAlertActivity.this, "Slide OK!", Toast.LENGTH_SHORT).show();
+                AlarmServiceBroadcastReciever reciever = new AlarmServiceBroadcastReciever();
+                reciever.CancelAlarm(AlarmAlertActivity.this);
+                ReleaseRelease();
+                Toast.makeText(AlarmAlertActivity.this, "早起啦", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-//        PhoneStateListener phoneStateListener = new PhoneStateListener() {
-//            @Override
-//            public void onCallStateChanged(int state, String incomingNumber) {
-//                switch (state) {
-//                    case TelephonyManager.CALL_STATE_RINGING:
-//                        Log.d(getClass().getSimpleName(), "Incoming call: "
-//                                + incomingNumber);
-//                        try {
-//                            mediaPlayer.pause();
-//                        } catch (IllegalStateException e) {
-//
-//                        }
-//                        break;
-//                    case TelephonyManager.CALL_STATE_IDLE:
-//                        Log.d(getClass().getSimpleName(), "Call State Idle");
-//                        try {
-//                            mediaPlayer.start();
-//                        } catch (IllegalStateException e) {
-//
-//                        }
-//                        break;
-//                }
-//                super.onCallStateChanged(state, incomingNumber);
-//            }
-//        };
-//
-//        telephonyManager.listen(phoneStateListener,
-//                PhoneStateListener.LISTEN_CALL_STATE);
-//
-//        // Toast.makeText(this, answerString, Toast.LENGTH_LONG).show();
-//
-//        startAlarm();
-
     }
 
     @Override
@@ -89,7 +91,6 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void startAlarm() {
-
         if (alarm.getAlarmTonePath() != "") {
             mediaPlayer = new MediaPlayer();
             if (alarm.IsVibrate()) {
@@ -113,10 +114,8 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see android.app.Activity#onBackPressed()
+    /**
+     * 禁止返回取消闹钟
      */
     @Override
     public void onBackPressed() {
@@ -133,6 +132,15 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
     protected void onPause() {
         super.onPause();
         StaticWakeLock.lockOff(this);
+    }
+
+    protected void ReleaseRelease() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            finish();
+        }
     }
 
     @Override
@@ -156,58 +164,14 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
         super.onDestroy();
     }
 
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
-        if (!alarmActive)
-            return;
-        String button = (String) v.getTag();
-        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        if (button.equalsIgnoreCase("clear")) {
-            if (answerBuilder.length() > 0) {
-                answerBuilder.setLength(answerBuilder.length() - 1);
-            }
-        } else if (button.equalsIgnoreCase(".")) {
-            if (!answerBuilder.toString().contains(button)) {
-                if (answerBuilder.length() == 0)
-                    answerBuilder.append(0);
-                answerBuilder.append(button);
-            }
-        } else if (button.equalsIgnoreCase("-")) {
-            if (answerBuilder.length() == 0) {
-                answerBuilder.append(button);
-            }
-        } else {
-            answerBuilder.append(button);
-            if (isAnswerCorrect()) {
-                alarmActive = false;
-                if (vibrator != null)
-                    vibrator.cancel();
-                try {
-                    mediaPlayer.stop();
-                } catch (IllegalStateException ise) {
 
-                }
-                try {
-                    mediaPlayer.release();
-                } catch (Exception e) {
-
-                }
-                this.finish();
-            }
-        }
-
-    }
-
-    public boolean isAnswerCorrect() {
-        boolean correct = false;
-        try {
-//            correct = mathProblem.getAnswer() == Float.parseFloat(answerBuilder.toString());
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 }
