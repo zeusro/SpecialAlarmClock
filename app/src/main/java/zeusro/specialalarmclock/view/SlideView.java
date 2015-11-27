@@ -51,6 +51,9 @@ public class SlideView extends View {
     private Matrix mMatrix;
     private ValueAnimator mValueAnimator;
 
+    /**
+     * 背景字体
+     */
     private String mText;
     private int mTextSize;
     private int mTextLeft;
@@ -152,6 +155,7 @@ public class SlideView extends View {
 
     /**
      * 碰瓷时触发
+     *
      * @param event
      * @return
      */
@@ -217,9 +221,10 @@ public class SlideView extends View {
     }
 
     /**
+     * 动画
      *
-     * @param start
-     * @param end
+     * @param start         开始的坐标
+     * @param end           结束点的坐标
      * @param velocity
      * @param isRightMoving
      */

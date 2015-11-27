@@ -41,6 +41,7 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
         slideView.setSlideListener(new SlideView.SlideListener() {
             @Override
             public void onDone() {
+
                 Toast.makeText(AlarmAlertActivity.this, "Slide OK!", Toast.LENGTH_SHORT).show();
             }
         });

@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
+        <!--todo 滑块的长度要通过代码动态设置 slidableLength-->
         <zeusro.specialalarmclock.view.SlideView
             android:id="@+id/slider"
             android:layout_width="match_parent"
@@ -29,14 +29,13 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:background="@mipmap/slideviewbg"
-            android:paddingBottom="0dp"
             slider:effectiveLength="190dp"
             slider:effectiveVelocity="1300dp"
             slider:maskText="@string/slider_text"
-            slider:maskTextMarginLeft="108dp"
+            slider:maskTextMarginLeft="128dp"
             slider:maskTextMarginTop="60dp"
             slider:maskTextSize="28sp"
-            slider:slidableLength="208dp"
+            slider:slidableLength="283dp"
             slider:slider="@mipmap/arrow"
             slider:sliderMarginLeft="22dp"
             slider:sliderMarginTop="24dp"/>
