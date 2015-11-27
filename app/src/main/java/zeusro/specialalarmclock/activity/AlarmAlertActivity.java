@@ -6,13 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.widget.Toast;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.StaticWakeLock;
+import zeusro.specialalarmclock.view.SlideView;
 
 public class AlarmAlertActivity extends AppCompatActivity implements View.OnClickListener {
     private Alarm alarm;
@@ -30,13 +31,20 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert);
         Bundle bundle = this.getIntent().getExtras();
-        alarm = (Alarm) bundle.getSerializable("alarm");
-        Log.d(this.getClass().getSimpleName(), String.valueOf(alarm != null));
-        if (null != alarm) {
-            Log.d(this.getClass().getSimpleName(), String.valueOf(alarm.getAlarmTime().getTime().toString()));
-            this.setTitle(alarm.getAlarmName());
-
+        if (bundle != null) {
+            alarm = (Alarm) bundle.getSerializable("alarm");
+            if (null != alarm) {
+                this.setTitle(alarm.getAlarmName());
+            }
         }
+        SlideView slideView = (SlideView) findViewById(R.id.slider);
+        slideView.setSlideListener(new SlideView.SlideListener() {
+            @Override
+            public void onDone() {
+                Toast.makeText(AlarmAlertActivity.this, "Slide OK!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 //        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 //        PhoneStateListener phoneStateListener = new PhoneStateListener() {
 //            @Override

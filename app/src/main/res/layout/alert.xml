@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:slider="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical" >
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".activity.AlarmAlertActivity">
+    <!--xmlns:slider="http://schemas.android.com/tools 是关键,让下面的自定义控件能够使用自定义属性    "-->
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:singleLine="true"
+        android:text="@string/AlertText"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <zeusro.specialalarmclock.view.SlideView
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:background="@mipmap/slideviewbg"
+            android:paddingBottom="0dp"
+            slider:effectiveLength="190dp"
+            slider:effectiveVelocity="1300dp"
+            slider:maskText="@string/slider_text"
+            slider:maskTextMarginLeft="108dp"
+            slider:maskTextMarginTop="60dp"
+            slider:maskTextSize="28sp"
+            slider:slidableLength="208dp"
+            slider:slider="@mipmap/arrow"
+            slider:sliderMarginLeft="22dp"
+            slider:sliderMarginTop="24dp"/>
+    </RelativeLayout>
+
 
 </LinearLayout>

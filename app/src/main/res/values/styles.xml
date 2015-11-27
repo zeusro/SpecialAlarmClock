@@ -7,5 +7,18 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
+    <!--SlideView -->
+    <declare-styleable name="SlideView">
+        <attr name="maskText" format="string"/>
+        <attr name="maskTextSize" format="dimension"/>
+        <attr name="maskTextMarginLeft" format="dimension"/>
+        <attr name="maskTextMarginTop" format="dimension"/>
+        <attr name="slider" format="reference"/>
+        <attr name="sliderMarginLeft" format="dimension"/>
+        <attr name="sliderMarginTop" format="dimension"/>
+        <attr name="slidableLength" format="dimension"/>
+        <attr name="effectiveLength" format="dimension"/>
+        <attr name="effectiveVelocity" format="dimension"/>
+    </declare-styleable>
+    <!--SlideView -->
 </resources>

@@ -17,4 +17,6 @@
     <string name="minus_button_text">-</string>
     <string name="NoClockAlert">你现在没有闹钟哦,添加一个吧</string>
     <string name="AlarmStatus">状态</string>
+    <string name="AlertText">每天叫醒我的不是我的梦想,而是我的颜值</string>
+    <string name="slider_text">滑动解锁</string>
 </resources>

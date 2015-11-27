@@ -54,6 +54,7 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
 //            if (alarm == null)
 //                throw new Exception("参数没有啊混蛋");
             //            service.putExtra("alarm", alarm);
+            // FIXME: 2015/11/27 通过对象传递找到对象而不是查数据库
             Intent service = new Intent(context, SchedulingService.class);
             service.putExtra("alarm", getNext(context));
 

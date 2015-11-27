@@ -2,4 +2,15 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!--SlideView -->
+    <dimen name="mask_text_size">28dp</dimen>
+    <dimen name="mask_text_margin_left">100dp</dimen>
+    <dimen name="mask_text_margin_top">60dp</dimen>
+    <dimen name="slider_margin_left">20dp</dimen>
+    <dimen name="slider_margin_top">30dp</dimen>
+    <dimen name="slidable_length">210dp</dimen>
+    <dimen name="effective_length">190dp</dimen>
+    <dimen name="effective_velocity">1300dp</dimen>
+    <!--SlideView -->
+
 </resources>
