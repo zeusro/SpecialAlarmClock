@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -35,7 +34,7 @@ import zeusro.specialalarmclock.Type;
  * Created by Z on 2015/11/16.
  */
 
-public class AlarmSettingItemListAdapter extends BaseAdapter implements Serializable {
+public class AlarmSettingItemListAdapter extends BaseAdapter {
 
     private Context context;
     private Alarm alarm;

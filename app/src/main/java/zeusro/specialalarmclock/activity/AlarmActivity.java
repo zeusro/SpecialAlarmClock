@@ -18,21 +18,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import zeusro.specialalarmclock.Alarm;
 import zeusro.specialalarmclock.Database;
 import zeusro.specialalarmclock.R;
 import zeusro.specialalarmclock.adapter.AlarmListAdapter;
+import zeusro.specialalarmclock.receiver.NotificationWakeUpReceiver;
 
 /**
  * 主activity
- *
  */
 public class AlarmActivity extends BaseActivity {
 
     AlarmListAdapter alarmListAdapter;
     ListView mathAlarmListView;
-    ImageButton add;
+    ImageButton add, setting;
+    private boolean isExit;
+    public final static int notificationId = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,9 @@ public class AlarmActivity extends BaseActivity {
         toast.show();
         SetlistView();
         SetAddButton();
+        SetSettingButton();
     }
+
 
     @Override
     protected void onStop() {
@@ -79,6 +85,7 @@ public class AlarmActivity extends BaseActivity {
         updateAlarmList();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        Log.d("activity","onActivityResult");
@@ -87,9 +94,9 @@ public class AlarmActivity extends BaseActivity {
         switch (resultCode) {
             case RESULT_OK:
                 Bundle b = data.getExtras();
-                Alarm alarm =(Alarm) b.getSerializable("object");//回传的值
-                if (alarm!=null){
-                        Log.d("data", alarm.getAlarmName());
+                Alarm alarm = (Alarm) b.getSerializable("object");//回传的值
+                if (alarm != null) {
+                    Log.d("data", alarm.getAlarmName());
 
                 }
 
@@ -118,7 +125,6 @@ public class AlarmActivity extends BaseActivity {
             }
         }
     }
-
 
 
     private void SetAddButton() {
@@ -182,7 +188,7 @@ public class AlarmActivity extends BaseActivity {
                     Alarm alarm = (Alarm) alarmListAdapter.getItem(position);
                     Intent intent = new Intent(AlarmActivity.this, AlarmPreferencesActivity.class);
                     intent.putExtra("alarm", alarm);
-                    startActivityForResult(intent,0);
+                    startActivityForResult(intent, 0);
                 }
 
             });
@@ -210,4 +216,44 @@ public class AlarmActivity extends BaseActivity {
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Timer tExit = null;
+        if (isExit == false) {
+            isExit = true; // 准备退出
+            Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            tExit = new Timer();
+            tExit.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    isExit = false; // 取消退出
+                }
+            }, 2000); // 如果2秒钟内没有按下返回键，则启动定时器取消掉刚才执行的任务
+        } else {
+            //退出
+            finish();
+        }
+    }
+
+    private void SetSettingButton() {
+        setting = (ImageButton) findViewById(R.id.Setting);
+        if (setting != null) {
+            setting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CreateNotification(null);
+//                    Toast.makeText(AlarmActivity.this, "该功能见鬼中", Toast.LENGTH_SHORT).show();
+//                    finish();
+                }
+
+            });
+        }
+    }
+
+    private void CreateNotification(Alarm alarm) {
+        Intent intent = new Intent();
+        intent.setClass(this, NotificationWakeUpReceiver.class);
+        sendBroadcast(intent);//发送广播事件
+    }
 }

@@ -1,9 +1,11 @@
 package zeusro.specialalarmclock.activity;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +37,11 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
             alarm = (Alarm) bundle.getSerializable("alarm");
             if (null != alarm) {
                 this.setTitle(alarm.getAlarmName());
+                startAlarm();
             }
         }
         SetSlideView();
         SetTelephonyStateChangedListener();
-        startAlarm();
     }
 
     private void SetTelephonyStateChangedListener() {
@@ -80,8 +82,22 @@ public class AlarmAlertActivity extends AppCompatActivity implements View.OnClic
                 reciever.CancelAlarm(AlarmAlertActivity.this);
                 ReleaseRelease();
                 Toast.makeText(AlarmAlertActivity.this, "早起啦", Toast.LENGTH_SHORT).show();
+                Log.d("SHIT", String.valueOf(Build.VERSION.SDK_INT));
+                if (Build.VERSION.SDK_INT > 15) {
+                    quit();
+                    return;
+                }
+                int pid = android.os.Process.myPid();
+                android.os.Process.killProcess(pid);
+                System.exit(0);
+
             }
         });
+    }
+
+    @TargetApi(16)
+    protected void quit() {
+        finishAffinity();
     }
 
     @Override

@@ -35,7 +35,7 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(context.getPackageName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+        Log.d(this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
         try {
             //            11-27 13:43:39.020 14674-14674/zeusro.specialalarmclock D/TEST: null
 //            11-27 13:43:39.020 14674-14674/zeusro.specialalarmclock D/TEST: android.intent.extra.ALARM_COUNT
@@ -43,6 +43,7 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
 //            11-27 13:43:39.020 14674-14674/zeusro.specialalarmclock D/AlarmServiceBroadcastReciever: false
 //            Log.d("TEST", String.valueOf(intent.getAction()));
 //            Bundle bundle = intent.getExtras();
+
 //            Set<String> keySet = bundle.keySet();
 //            for (String key : keySet) {
 //                Object value = bundle.get(key);
@@ -55,8 +56,11 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
 //                throw new Exception("参数没有啊混蛋");
             //            service.putExtra("alarm", alarm);
             // FIXME: 2015/11/27 通过对象传递找到对象而不是查数据库
+//            Log.d(this.getClass().getSimpleName(), String.valueOf( intent.getSerializableExtra("alarm") != null));
+//            alarm = (Alarm) intent.getSerializableExtra("alarm");
+            alarm = getNext(context);
             Intent service = new Intent(context, SchedulingService.class);
-            service.putExtra("alarm", getNext(context));
+            service.putExtra("alarm", alarm);
 
 
             // Start the service, keeping the device awake while it is launching.
@@ -77,6 +81,7 @@ public class AlarmServiceBroadcastReciever extends WakefulBroadcastReceiver {
         if (alarm == null) {
             Log.d(context.getPackageName(), "没有闹钟");
             CancelAlarm(context);
+            return;
         }
         intent.setAction("zeusro.action.alert");
         intent.putExtra("alarm", alarm);
