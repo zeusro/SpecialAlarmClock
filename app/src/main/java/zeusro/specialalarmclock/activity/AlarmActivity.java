@@ -55,7 +55,7 @@ public class AlarmActivity extends BaseActivity {
 
     @Override
     protected void onStop() {
-//        Log.d("activity","onStop");
+        Log.d("activity","onStop");
         super.onStop();
     }
 
